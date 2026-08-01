@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const login = process.env.PROFILE_LOGIN || "dumbly-smart";
 const token = process.env.GH_TOKEN;
@@ -147,4 +147,22 @@ await Promise.all([
   writeFile("generated/commit-page-light.svg", render("light")),
   writeFile("generated/activity.json", `${JSON.stringify(stats, null, 2)}\n`),
 ]);
+
+const readme = await readFile("README.md", "utf8");
+const start = "<!-- ACTIVITY_DETAILS:START -->";
+const end = "<!-- ACTIVITY_DETAILS:END -->";
+const details = `${start}
+<details>
+<summary><b>Read the current numbers</b></summary>
+<br>
+
+Over the past year, I made **${commits} public commits** across **${active.length} active days**. I have made **${recent7} contributions this week** and **${recent30} in the last 30 days**. My current streak is **${stats.currentStreak} ${stats.currentStreak === 1 ? "day" : "days"}**.
+
+The dashboard counts public commits separately from other GitHub contributions such as pull requests and issues. [Open the underlying JSON](./generated/activity.json) if you want the exact data and update time.
+
+</details>
+${end}`;
+const activityPattern = new RegExp(`${start}[\\s\\S]*?${end}`);
+if (!activityPattern.test(readme)) throw new Error("README activity markers are missing");
+await writeFile("README.md", readme.replace(activityPattern, details));
 console.log(stats);

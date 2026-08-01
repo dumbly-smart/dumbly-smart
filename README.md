@@ -8,36 +8,23 @@
 [![Followers](https://img.shields.io/github/followers/dumbly-smart?style=for-the-badge&label=FOLLOWERS&color=00d9e9&labelColor=11151b)](https://github.com/dumbly-smart?tab=followers)
 [![Stars](https://img.shields.io/github/stars/dumbly-smart?affiliations=OWNER%2CCOLLABORATOR&style=for-the-badge&label=STARS&color=f4b942&labelColor=11151b)](https://github.com/dumbly-smart?tab=repositories)
 
-[`PROJECTS`](#-selected-projects) · [`LIVE DATA`](#-live-commit-data) · [`STACK`](#-working-stack) · [`CONTACT`](#-open-a-channel)
+[`PROJECTS`](#selected-projects) · [`LIVE DATA`](#live-commit-data) · [`STACK`](#working-stack) · [`CONTACT`](#get-in-touch)
 
 </div>
 
-## `whoami`
+## About me
 
-```yaml
-handle: dumbly-smart
-interests:
-  - defensive security and malware behaviour
-  - reverse engineering and binary exploitation
-  - applied cryptography
-  - self-hosted infrastructure
-currently_building:
-  - safe tools for understanding hostile code
-  - local-first software with explicit threat models
-off_screen:
-  - manga
-  - breaking and rebuilding my Linux setup
-```
+I'm interested in the parts of software that are usually hidden behind the interface: what a program does with untrusted input, where its security boundaries really are, and what happens when its assumptions fail.
 
-I care about software that explains its decisions, fails safely, and does not hide important boundaries behind marketing language.
+Most of my time goes into defensive security, reverse engineering, applied cryptography, and self-hosted systems. I like building small tools that explain what they are doing instead of asking to be trusted. When I'm away from a terminal, I'm probably reading manga or rebuilding some part of my Linux setup that was working perfectly well before I touched it.
 
-## ⚡ Selected projects
+## Selected projects
 
 <details open>
 <summary><b>PhantomCircuit — behavioural shellcode emulator</b></summary>
 <br>
 
-Dependency-free x86-64 emulation for defensive triage. It classifies shellcode intent without executing the sample, touching the host filesystem, or opening a real socket.
+I built PhantomCircuit to answer a simple question: what is this shellcode trying to do? It emulates a focused subset of x86-64 and reports the behaviour it observes without executing the sample on the host.
 
 ```console
 $ phantom-circuit --file sample.bin --json
@@ -52,7 +39,7 @@ verdict: reverse_shell · confidence: 92% · native_execution: false
 <summary><b>Eternal Vault — local-first password manager</b></summary>
 <br>
 
-An experimental vault using XChaCha20-Poly1305, Argon2id, atomic writes, and a documented threat model. No account, cloud service, telemetry, or background sync.
+Eternal Vault is my experiment in making a password manager whose boundaries are easy to understand. It stays local, has no account or telemetry, and documents the assumptions behind its cryptography and storage design.
 
 **Rust · applied cryptography · local-first** — [source](https://github.com/dumbly-smart/eternal-vault) · [threat model](https://github.com/dumbly-smart/eternal-vault/blob/main/docs/threat-model.md)
 
@@ -62,7 +49,7 @@ An experimental vault using XChaCha20-Poly1305, Argon2id, atomic writes, and a d
 <summary><b>Farlands — managed game-server infrastructure</b></summary>
 <br>
 
-Realtime application and infrastructure engineering around Kubernetes orchestration, persistent storage, backups, and server lifecycle management.
+Farlands is where I work on the less glamorous parts of running game servers reliably: orchestration, persistent storage, backups, realtime state, and lifecycle management.
 
 **TypeScript · Kubernetes · WebSockets** — [source](https://github.com/dumbly-smart/farlands)
 
@@ -72,13 +59,13 @@ Realtime application and infrastructure engineering around Kubernetes orchestrat
 <summary><b>GS1 Voice CTF — security challenge</b></summary>
 <br>
 
-A challenge exploring the unusual attack surface where voice workflows, physical identifiers, and software meet.
+This challenge explores what can go wrong when voice workflows, physical identifiers, and software meet. I like CTFs most when the vulnerability comes from the system's design rather than an isolated trick.
 
 **CTF · protocols · security research** — [source](https://github.com/dumbly-smart/gs1-voice-ctf)
 
 </details>
 
-## ◉ Live commit data
+## Live commit data
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg">
@@ -92,7 +79,19 @@ A challenge exploring the unusual attack surface where voice workflows, physical
 
 </div>
 
-## ⛓ Working stack
+<!-- ACTIVITY_DETAILS:START -->
+<details>
+<summary><b>Read the current numbers</b></summary>
+<br>
+
+Over the past year, I made **219 public commits** across **27 active days**. I have made **29 contributions this week** and **95 in the last 30 days**. My current streak is **1 day**.
+
+The dashboard counts public commits separately from other GitHub contributions such as pull requests and issues. [Open the underlying JSON](./generated/activity.json) if you want the exact data and update time.
+
+</details>
+<!-- ACTIVITY_DETAILS:END -->
+
+## Working stack
 
 <div align="center">
 
@@ -116,9 +115,9 @@ This is a working set, not a wall of “mastered” badges. The repositories abo
 
 </details>
 
-## ↗ Open a channel
+## Get in touch
 
-Have an interesting system, security problem, project, or manga recommendation?
+If you're working on an interesting security problem, want to collaborate on a project, or simply have a manga recommendation, feel free to leave a message.
 
 <div align="center">
 
