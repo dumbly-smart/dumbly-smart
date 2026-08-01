@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="455" viewBox="0 0 1000 455" role="img" aria-labelledby="title desc">
   <title id="title">dumbly-smart commit data</title>
   <desc id="desc">One year of GitHub activity, updated daily.</desc>
-  <metadata>{&quot;login&quot;:&quot;dumbly-smart&quot;,&quot;generatedAt&quot;:&quot;2026-08-01T23:04:04.195Z&quot;,&quot;period&quot;:{&quot;from&quot;:&quot;2025-07-27&quot;,&quot;to&quot;:&quot;2026-08-01&quot;},&quot;publicCommits&quot;:219,&quot;totalContributions&quot;:226,&quot;activeDays&quot;:27,&quot;currentStreak&quot;:1,&quot;last7Days&quot;:29,&quot;last30Days&quot;:95,&quot;peakDay&quot;:31}</metadata>
-  <rect width="1000" height="420" fill="#0c0d0f"/>
-  <path d="M28 28H972M28 392H972M28 28V392M972 28V392" stroke="#e8e6df" stroke-width="2"/>
+  <metadata>{&quot;login&quot;:&quot;dumbly-smart&quot;,&quot;generatedAt&quot;:&quot;2026-08-01T23:05:46.560Z&quot;,&quot;period&quot;:{&quot;from&quot;:&quot;2025-07-27&quot;,&quot;to&quot;:&quot;2026-08-01&quot;},&quot;publicCommits&quot;:219,&quot;totalContributions&quot;:226,&quot;activeDays&quot;:27,&quot;currentStreak&quot;:1,&quot;last7Days&quot;:29,&quot;last30Days&quot;:95,&quot;peakDay&quot;:31}</metadata>
+  <rect width="1000" height="455" fill="#0c0d0f"/>
+  <path d="M28 28H972M28 427H972M28 28V427M972 28V427" stroke="#e8e6df" stroke-width="2"/>
   <text x="48" y="62" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="#73777f">GITHUB / LAST 365 DAYS</text>
   <text x="952" y="62" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="#73777f">2025-07-27 — 2026-08-01</text>
-  <path d="M28 80H972M28 186H972M660 80V392" stroke="#e8e6df" opacity=".3"/>
+  <path d="M28 80H972M28 186H972M660 80V427" stroke="#e8e6df" opacity=".3"/>
   <text x="48" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="#73777f">PUBLIC COMMITS</text>
   <text x="48" y="166" font-family="Georgia,serif" font-size="62" font-weight="700" fill="#e8e6df">219</text>
   <text x="220" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="#73777f">CONTRIBUTIONS</text><text x="220" y="163" font-family="Georgia,serif" font-size="46" fill="#e8e6df">226</text>
