@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="58" viewBox="0 0 760 58" role="img" aria-label="Current interests">
+  <style>
+    text{font:700 16px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#7df9ff;text-anchor:middle}
+    .line{opacity:0;animation:show 12s infinite}
+    .b{animation-delay:3s}.c{animation-delay:6s}.d{animation-delay:9s}
+    @keyframes show{0%,3%{opacity:0}6%,22%{opacity:1}25%,100%{opacity:0}}
+    .cursor{animation:blink .8s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+  </style>
+  <text class="line" x="380" y="35">Defensive security without security theatre <tspan class="cursor">▋</tspan></text>
+  <text class="line b" x="380" y="35">Reverse engineering opaque systems <tspan class="cursor">▋</tspan></text>
+  <text class="line c" x="380" y="35">Building local-first and self-hosted tools <tspan class="cursor">▋</tspan></text>
+  <text class="line d" x="380" y="35">Reading manga between debugging sessions <tspan class="cursor">▋</tspan></text>
+</svg>

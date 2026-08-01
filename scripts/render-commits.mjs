@@ -83,11 +83,12 @@ function render(theme) {
   const ink = dark ? "#e8e6df" : "#111111";
   const paper = dark ? "#0c0d0f" : "#f3f0e8";
   const quiet = dark ? "#73777f" : "#77736a";
-  const wash = dark ? "#24272d" : "#d6d1c5";
-  const cell = 8;
+  const panel = dark ? "#111820" : "#e8e9e5";
+  const accent = dark ? "#7df9ff" : "#007d8a";
+  const cell = 7;
   const gap = 3;
-  const gridX = 43;
-  const gridY = 385;
+  const gridX = 51;
+  const gridY = 357;
   const visible = days.slice(-371);
   const firstWeekday = visible[0]?.weekday || 0;
   const cells = visible.map((day, index) => {
@@ -100,36 +101,43 @@ function render(theme) {
   }).join("");
 
   const bars = days.slice(-30).map((day, i) => {
-    const height = peak ? Math.max(1, Math.round((day.contributionCount / peak) * 92)) : 1;
-    return `<rect x="${377 + i * 8}" y="${304 - height}" width="5" height="${height}" fill="${ink}"/>`;
+    const height = peak ? Math.max(2, Math.round((day.contributionCount / peak) * 76)) : 2;
+    return `<rect x="${51 + i * 19}" y="${325 - height}" width="12" height="${height}" rx="2" fill="${accent}" opacity="${day.contributionCount ? ".9" : ".16"}"><title>${day.date}: ${day.contributionCount}</title></rect>`;
   }).join("");
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="510" viewBox="0 0 700 510" role="img" aria-labelledby="title desc">
-  <title id="title">${esc(login)} — commit page</title>
-  <desc id="desc">A monochrome manga-like page generated from one year of GitHub contributions.</desc>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="450" viewBox="0 0 1000 450" role="img" aria-labelledby="title desc">
+  <title id="title">${esc(login)} — live commit dashboard</title>
+  <desc id="desc">A dashboard generated daily from one year of GitHub activity.</desc>
   <metadata>${esc(JSON.stringify(stats))}</metadata>
   <!-- Inspect: curl -sL https://raw.githubusercontent.com/${esc(login)}/${esc(login)}/main/generated/commit-page-${theme}.svg -->
   <defs>
-    <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="${ink}" opacity=".22"/></pattern>
-    <pattern id="lines" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(19)"><line x1="0" y1="0" x2="0" y2="8" stroke="${ink}" stroke-width="2" opacity=".14"/></pattern>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="${accent}" opacity=".045"/></pattern>
   </defs>
-  <rect width="700" height="510" fill="${paper}"/>
-  <path d="M20 20H680V490H20Z M34 34V476H666V34Z" fill="${ink}" fill-rule="evenodd"/>
-  <rect x="43" y="48" width="614" height="98" fill="url(#lines)" stroke="${ink}" stroke-width="3"/>
-  <text x="58" y="87" font-family="ui-monospace,monospace" font-size="14" letter-spacing="3" fill="${quiet}">A YEAR, COMPILED DAILY</text>
-  <text x="56" y="127" font-family="ui-monospace,monospace" font-size="32" font-weight="800" fill="${ink}">${esc(login)}</text>
-  <rect x="43" y="161" width="305" height="184" fill="url(#dots)" stroke="${ink}" stroke-width="3"/>
-  <path d="M43 289L168 181L230 264L348 186V345H43Z" fill="${wash}"/>
-  <text x="59" y="199" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS / 365D</text>
-  <text x="57" y="267" font-family="ui-monospace,monospace" font-size="70" font-weight="900" fill="${ink}">${commits}</text>
-  <rect x="363" y="161" width="294" height="184" fill="none" stroke="${ink}" stroke-width="3"/>
-  <text x="378" y="190" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2" fill="${quiet}">LAST 30 DAYS / SIGNAL</text>
+  <rect width="1000" height="450" rx="12" fill="${paper}"/>
+  <rect width="1000" height="450" rx="12" fill="url(#grid)"/>
+  <rect x="22" y="22" width="956" height="406" rx="9" fill="none" stroke="${quiet}" opacity=".35"/>
+  <circle cx="48" cy="54" r="5" fill="${accent}"/><circle cx="66" cy="54" r="5" fill="${quiet}" opacity=".35"/><circle cx="84" cy="54" r="5" fill="${quiet}" opacity=".35"/>
+  <text x="110" y="60" font-family="ui-monospace,monospace" font-size="14" font-weight="700" letter-spacing="2" fill="${ink}">ACTIVITY://LIVE</text>
+  <text x="951" y="60" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} → ${esc(stats.period.to)}</text>
+  <rect x="38" y="92" width="214" height="94" rx="7" fill="${panel}" stroke="${accent}" opacity=".95"/>
+  <rect x="267" y="92" width="214" height="94" rx="7" fill="${panel}"/>
+  <rect x="496" y="92" width="214" height="94" rx="7" fill="${panel}"/>
+  <rect x="725" y="92" width="237" height="94" rx="7" fill="${panel}"/>
+  <text x="55" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS / 365D</text><text x="54" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${accent}">${commits}</text>
+  <text x="284" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTIONS</text><text x="283" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${calendar.totalContributions}</text>
+  <text x="513" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CURRENT STREAK</text><text x="512" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${stats.currentStreak}<tspan font-size="15"> DAYS</tspan></text>
+  <text x="742" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">ACTIVE DAYS</text><text x="741" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${active.length}</text>
+  <text x="49" y="220" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2" fill="${quiet}">30-DAY SIGNAL</text>
   ${bars}
-  <text x="639" y="326" text-anchor="end" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">${recent30} EVENTS</text>
-  <rect x="43" y="361" width="614" height="101" fill="none" stroke="${ink}" stroke-width="3"/>
+  <path d="M38 337H637" stroke="${quiet}" opacity=".25"/>
+  <text x="49" y="349" font-family="ui-monospace,monospace" font-size="9" letter-spacing="2" fill="${quiet}">365-DAY HEATMAP</text>
   ${cells}
-  <text x="641" y="453" text-anchor="end" font-family="ui-monospace,monospace" font-size="10" letter-spacing="1" fill="${quiet}">STREAK ${stats.currentStreak}D · ACTIVE ${active.length}D · PEAK ${peak}</text>
-  <path d="M25 112H38M25 120H38M662 378H675M662 386H675" stroke="${ink}" stroke-width="2"/>
+  <rect x="672" y="210" width="290" height="197" rx="7" fill="${panel}"/>
+  <text x="696" y="243" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">WINDOW SUMMARY</text>
+  <text x="696" y="282" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">last 7 days</text><text x="936" y="282" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${recent7}</text>
+  <text x="696" y="322" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">last 30 days</text><text x="936" y="322" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${recent30}</text>
+  <text x="696" y="362" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">peak day</text><text x="936" y="362" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${peak}</text>
+  <circle cx="697" cy="389" r="3" fill="${accent}"/><text x="710" y="393" font-family="ui-monospace,monospace" font-size="10" fill="${quiet}">generated ${esc(stats.generatedAt.slice(0, 10))}</text>
 </svg>`;
 }
 

@@ -1,105 +1,130 @@
 <div align="center">
-  <img src="./assets/hero.svg" width="100%" alt="dumbly-smart — security engineer and systems builder" />
+
+<img width="100%" src="./assets/hero.svg" alt="dumbly-smart" />
+
+<img width="760" src="./assets/typing.svg" alt="Defensive security, reverse engineering, systems, and self-hosted infrastructure" />
+
+[![Profile views](https://komarev.com/ghpvc/?username=dumbly-smart&style=for-the-badge&color=00d9e9&label=PROFILE+VIEWS)](https://github.com/dumbly-smart)
+[![Followers](https://img.shields.io/github/followers/dumbly-smart?style=for-the-badge&label=FOLLOWERS&color=00d9e9&labelColor=11151b)](https://github.com/dumbly-smart?tab=followers)
+[![Stars](https://img.shields.io/github/stars/dumbly-smart?affiliations=OWNER%2CCOLLABORATOR&style=for-the-badge&label=STARS&color=f4b942&labelColor=11151b)](https://github.com/dumbly-smart?tab=repositories)
+
+[`PROJECTS`](#-selected-projects) · [`LIVE DATA`](#-live-commit-data) · [`STACK`](#-working-stack) · [`CONTACT`](#-open-a-channel)
+
 </div>
 
-<br>
+## `whoami`
 
-I build software by asking the uncomfortable questions first: **what can this touch, what can it leak, and how does it fail?** My current work sits around defensive security, low-level systems, self-hosted infrastructure, and tools that make opaque behavior explainable.
-
-```text
-focus     malware behavior · reverse engineering · applied cryptography
-building  small systems with explicit boundaries and boring failure modes
-reading   manga, threat models, disassembly, and documentation
+```yaml
+handle: dumbly-smart
+interests:
+  - defensive security and malware behaviour
+  - reverse engineering and binary exploitation
+  - applied cryptography
+  - self-hosted infrastructure
+currently_building:
+  - safe tools for understanding hostile code
+  - local-first software with explicit threat models
+off_screen:
+  - manga
+  - breaking and rebuilding my Linux setup
 ```
 
-## Selected work
+I care about software that explains its decisions, fails safely, and does not hide important boundaries behind marketing language.
 
-<table>
-<tr>
-<td width="50%" valign="top">
+## ⚡ Selected projects
 
-### [PhantomCircuit](https://github.com/dumbly-smart/phantom-circuit)
+<details open>
+<summary><b>PhantomCircuit — behavioural shellcode emulator</b></summary>
+<br>
 
-A dependency-free x86-64 shellcode emulator for defensive triage. It turns inert bytes into an explainable behavioral verdict without executing them on the host.
+Dependency-free x86-64 emulation for defensive triage. It classifies shellcode intent without executing the sample, touching the host filesystem, or opening a real socket.
 
-`emulation` `malware-analysis` `python`
+```console
+$ phantom-circuit --file sample.bin --json
+verdict: reverse_shell · confidence: 92% · native_execution: false
+```
 
-</td>
-<td width="50%" valign="top">
+**Python · emulation · malware analysis** — [source](https://github.com/dumbly-smart/phantom-circuit)
 
-### [Eternal Vault](https://github.com/dumbly-smart/eternal-vault)
+</details>
 
-A local-only password manager built around XChaCha20-Poly1305, Argon2id, atomic writes, and an explicit threat model.
+<details>
+<summary><b>Eternal Vault — local-first password manager</b></summary>
+<br>
 
-`rust` `cryptography` `local-first`
+An experimental vault using XChaCha20-Poly1305, Argon2id, atomic writes, and a documented threat model. No account, cloud service, telemetry, or background sync.
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+**Rust · applied cryptography · local-first** — [source](https://github.com/dumbly-smart/eternal-vault) · [threat model](https://github.com/dumbly-smart/eternal-vault/blob/main/docs/threat-model.md)
 
-### [Farlands](https://github.com/dumbly-smart/farlands)
+</details>
 
-Infrastructure and application engineering for managed game servers: orchestration, backups, realtime state, and operational tooling.
+<details>
+<summary><b>Farlands — managed game-server infrastructure</b></summary>
+<br>
 
-`typescript` `kubernetes` `systems`
+Realtime application and infrastructure engineering around Kubernetes orchestration, persistent storage, backups, and server lifecycle management.
 
-</td>
-<td width="50%" valign="top">
+**TypeScript · Kubernetes · WebSockets** — [source](https://github.com/dumbly-smart/farlands)
 
-### [GS1 Voice CTF](https://github.com/dumbly-smart/gs1-voice-ctf)
+</details>
 
-A security challenge built around voice workflows and the strange attack surface created where physical identifiers meet software.
+<details>
+<summary><b>GS1 Voice CTF — security challenge</b></summary>
+<br>
 
-`ctf` `security-research` `protocols`
+A challenge exploring the unusual attack surface where voice workflows, physical identifiers, and software meet.
 
-</td>
-</tr>
-</table>
+**CTF · protocols · security research** — [source](https://github.com/dumbly-smart/gs1-voice-ctf)
 
-## Commit signal
+</details>
+
+## ◉ Live commit data
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg">
-  <img alt="A manga-page composition generated from dumbly-smart's GitHub activity" src="./generated/commit-page-light.svg" width="100%">
+  <img width="100%" alt="Live GitHub commit dashboard" src="./generated/commit-page-light.svg">
 </picture>
 
-<sub>Rendered daily from GitHub data. The SVG contains the underlying activity record in its metadata—download it and inspect the source.</sub>
+<div align="center">
 
-## Working set
+`updated daily by GitHub Actions` · [`raw activity.json`](./generated/activity.json) · [`inspect the generator`](./scripts/render-commits.mjs)
 
-![Rust](https://img.shields.io/badge/Rust-111111?style=for-the-badge&logo=rust&logoColor=white)
-![Python](https://img.shields.io/badge/Python-111111?style=for-the-badge&logo=python&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-111111?style=for-the-badge&logo=typescript&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-111111?style=for-the-badge&logo=linux&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-111111?style=for-the-badge&logo=kubernetes&logoColor=white)
-![Ghidra](https://img.shields.io/badge/Ghidra-111111?style=for-the-badge&logo=ghidra&logoColor=white)
+</div>
 
-<details>
-<summary><b>What I care about when I build</b></summary>
-<br>
-
-- Threat models that describe real boundaries instead of promising “military-grade” anything.
-- Tools that explain their conclusions and admit when the answer is unknown.
-- Local-first software, reversible operations, minimal dependencies, and inspectable formats.
-- Understanding a system beneath its happy path: parsers, protocols, memory, and failure states.
-
-</details>
-
-<details>
-<summary><b>Off-screen</b></summary>
-<br>
-
-Manga is where I go for pacing, composition, and worlds that feel larger than their exposition. That influence appears here in the black-and-white visual language—not in character art or borrowed panels.
-
-</details>
+## ⛓ Working stack
 
 <div align="center">
-  <br>
-  <a href="https://github.com/dumbly-smart?tab=repositories">repositories</a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/dumbly-smart?tab=stars">field notes</a>
-  <br><br>
-  <sub>Everything interesting survives inspection.</sub>
+
+**Languages**
+
+[![Languages](https://skillicons.dev/icons?i=rust,py,ts,js,bash,c,cpp&theme=dark)](https://github.com/dumbly-smart?tab=repositories)
+
+**Systems and tooling**
+
+[![Tools](https://skillicons.dev/icons?i=linux,docker,kubernetes,git,github,postgres,redis&theme=dark)](https://github.com/dumbly-smart?tab=repositories)
+
+</div>
+
+<details>
+<summary><b>Security working set</b></summary>
+<br>
+
+`Ghidra` · `GDB/pwndbg` · `Burp Suite` · `Wireshark` · `pwntools` · `Linux namespaces` · `x86-64` · `ELF`
+
+This is a working set, not a wall of “mastered” badges. The repositories above are the evidence.
+
+</details>
+
+## ↗ Open a channel
+
+Have an interesting system, security problem, project, or manga recommendation?
+
+<div align="center">
+
+[![Start a discussion](https://img.shields.io/badge/START_A_DISCUSSION-00d9e9?style=for-the-badge&logo=github&logoColor=11151b)](https://github.com/dumbly-smart/dumbly-smart/issues/new?template=signal.yml)
+[![Browse repositories](https://img.shields.io/badge/BROWSE_REPOSITORIES-20262e?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dumbly-smart?tab=repositories)
+
+<sub>Readable interfaces. Inspectable systems.</sub>
+
 </div>
