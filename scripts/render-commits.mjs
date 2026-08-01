@@ -83,8 +83,7 @@ function render(theme) {
   const ink = dark ? "#e8e6df" : "#111111";
   const paper = dark ? "#0c0d0f" : "#f3f0e8";
   const quiet = dark ? "#73777f" : "#77736a";
-  const panel = dark ? "#111820" : "#e8e9e5";
-  const accent = dark ? "#7df9ff" : "#007d8a";
+  const accent = "#c43b2f";
   const cell = 7;
   const gap = 3;
   const gridX = 51;
@@ -105,39 +104,29 @@ function render(theme) {
     return `<rect x="${51 + i * 19}" y="${325 - height}" width="12" height="${height}" rx="2" fill="${accent}" opacity="${day.contributionCount ? ".9" : ".16"}"><title>${day.date}: ${day.contributionCount}</title></rect>`;
   }).join("");
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="450" viewBox="0 0 1000 450" role="img" aria-labelledby="title desc">
-  <title id="title">${esc(login)} — live commit dashboard</title>
-  <desc id="desc">A dashboard generated daily from one year of GitHub activity.</desc>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">${esc(login)} commit data</title>
+  <desc id="desc">One year of GitHub activity, updated daily.</desc>
   <metadata>${esc(JSON.stringify(stats))}</metadata>
-  <!-- Inspect: curl -sL https://raw.githubusercontent.com/${esc(login)}/${esc(login)}/main/generated/commit-page-${theme}.svg -->
-  <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="${accent}" opacity=".045"/></pattern>
-  </defs>
-  <rect width="1000" height="450" rx="12" fill="${paper}"/>
-  <rect width="1000" height="450" rx="12" fill="url(#grid)"/>
-  <rect x="22" y="22" width="956" height="406" rx="9" fill="none" stroke="${quiet}" opacity=".35"/>
-  <circle cx="48" cy="54" r="5" fill="${accent}"/><circle cx="66" cy="54" r="5" fill="${quiet}" opacity=".35"/><circle cx="84" cy="54" r="5" fill="${quiet}" opacity=".35"/>
-  <text x="110" y="60" font-family="ui-monospace,monospace" font-size="14" font-weight="700" letter-spacing="2" fill="${ink}">ACTIVITY://LIVE</text>
-  <text x="951" y="60" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} → ${esc(stats.period.to)}</text>
-  <rect x="38" y="92" width="214" height="94" rx="7" fill="${panel}" stroke="${accent}" opacity=".95"/>
-  <rect x="267" y="92" width="214" height="94" rx="7" fill="${panel}"/>
-  <rect x="496" y="92" width="214" height="94" rx="7" fill="${panel}"/>
-  <rect x="725" y="92" width="237" height="94" rx="7" fill="${panel}"/>
-  <text x="55" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS / 365D</text><text x="54" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${accent}">${commits}</text>
-  <text x="284" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTIONS</text><text x="283" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${calendar.totalContributions}</text>
-  <text x="513" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CURRENT STREAK</text><text x="512" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${stats.currentStreak}<tspan font-size="15"> DAYS</tspan></text>
-  <text x="742" y="119" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">ACTIVE DAYS</text><text x="741" y="165" font-family="ui-monospace,monospace" font-size="40" font-weight="800" fill="${ink}">${active.length}</text>
-  <text x="49" y="220" font-family="ui-monospace,monospace" font-size="11" letter-spacing="2" fill="${quiet}">30-DAY SIGNAL</text>
+  <rect width="1000" height="420" fill="${paper}"/>
+  <path d="M28 28H972M28 392H972M28 28V392M972 28V392" stroke="${ink}" stroke-width="2"/>
+  <text x="48" y="62" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">GITHUB / LAST 365 DAYS</text>
+  <text x="952" y="62" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} — ${esc(stats.period.to)}</text>
+  <path d="M28 80H972M28 186H972M660 80V392" stroke="${ink}" opacity=".3"/>
+  <text x="48" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS</text>
+  <text x="48" y="166" font-family="Georgia,serif" font-size="62" font-weight="700" fill="${ink}">${commits}</text>
+  <text x="220" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTIONS</text><text x="220" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${calendar.totalContributions}</text>
+  <text x="390" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">STREAK</text><text x="390" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${stats.currentStreak}<tspan font-family="ui-monospace,monospace" font-size="12"> days</tspan></text>
+  <text x="525" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">ACTIVE DAYS</text><text x="525" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${active.length}</text>
+  <text x="48" y="215" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">LAST 30 DAYS</text>
   ${bars}
-  <path d="M38 337H637" stroke="${quiet}" opacity=".25"/>
-  <text x="49" y="349" font-family="ui-monospace,monospace" font-size="9" letter-spacing="2" fill="${quiet}">365-DAY HEATMAP</text>
+  <path d="M48 337H638" stroke="${ink}" opacity=".25"/>
+  <text x="49" y="351" font-family="ui-monospace,monospace" font-size="9" letter-spacing="2" fill="${quiet}">THE YEAR</text>
   ${cells}
-  <rect x="672" y="210" width="290" height="197" rx="7" fill="${panel}"/>
-  <text x="696" y="243" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">WINDOW SUMMARY</text>
-  <text x="696" y="282" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">last 7 days</text><text x="936" y="282" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${recent7}</text>
-  <text x="696" y="322" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">last 30 days</text><text x="936" y="322" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${recent30}</text>
-  <text x="696" y="362" font-family="ui-monospace,monospace" font-size="14" fill="${ink}">peak day</text><text x="936" y="362" text-anchor="end" font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="${accent}">${peak}</text>
-  <circle cx="697" cy="389" r="3" fill="${accent}"/><text x="710" y="393" font-family="ui-monospace,monospace" font-size="10" fill="${quiet}">generated ${esc(stats.generatedAt.slice(0, 10))}</text>
+  <text x="700" y="218" font-family="Georgia,serif" font-size="22" fill="${ink}">Recent</text>
+  <text x="700" y="263" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">7 days</text><text x="936" y="263" text-anchor="end" font-family="Georgia,serif" font-size="26" fill="${ink}">${recent7}</text>
+  <text x="700" y="310" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">30 days</text><text x="936" y="310" text-anchor="end" font-family="Georgia,serif" font-size="26" fill="${ink}">${recent30}</text>
+  <text x="700" y="357" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">peak day</text><text x="936" y="357" text-anchor="end" font-family="Georgia,serif" font-size="26" fill="${accent}">${peak}</text>
 </svg>`;
 }
 
@@ -153,12 +142,12 @@ const start = "<!-- ACTIVITY_DETAILS:START -->";
 const end = "<!-- ACTIVITY_DETAILS:END -->";
 const details = `${start}
 <details>
-<summary><b>Read the current numbers</b></summary>
+<summary>Read the numbers</summary>
 <br>
 
 Over the past year, I made **${commits} public commits** across **${active.length} active days**. I have made **${recent7} contributions this week** and **${recent30} in the last 30 days**. My current streak is **${stats.currentStreak} ${stats.currentStreak === 1 ? "day" : "days"}**.
 
-The dashboard counts public commits separately from other GitHub contributions such as pull requests and issues. [Open the underlying JSON](./generated/activity.json) if you want the exact data and update time.
+[Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
 
 </details>
 ${end}`;
@@ -185,32 +174,26 @@ const wrapWords = (text, width = 92) => text.split(/\s+/).reduce((lines, word) =
 }, []);
 const kuralXml = (theme) => {
   const dark = theme === "dark";
-  const background = dark ? "#090d12" : "#f4f5f2";
-  const panel = dark ? "#111820" : "#ffffff";
-  const ink = dark ? "#f1f4f5" : "#111820";
-  const quiet = dark ? "#85919d" : "#66717b";
-  const accent = dark ? "#7df9ff" : "#007d8a";
+  const background = dark ? "#111111" : "#f2efe7";
+  const ink = dark ? "#eeeae0" : "#171717";
+  const quiet = dark ? "#99958d" : "#68645d";
+  const accent = "#c43b2f";
   const english = wrapWords(kural.english.replace(/;/g, "; "));
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
   <title id="k-title">Thirukural of the day: Kural ${kural.number}</title>
   <desc id="k-desc">${esc(kural.tamil.join(" "))} ${esc(kural.english)}</desc>
-  <defs>
-    <pattern id="k-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="${accent}" opacity=".05"/></pattern>
-    <linearGradient id="k-edge" x1="0" x2="1"><stop stop-color="${accent}"/><stop offset="1" stop-color="${accent}" stop-opacity="0"/></linearGradient>
-  </defs>
-  <rect width="1000" height="300" rx="12" fill="${background}"/><rect width="1000" height="300" rx="12" fill="url(#k-grid)"/>
-  <rect x="22" y="22" width="956" height="256" rx="9" fill="${panel}" stroke="${quiet}" stroke-opacity=".28"/>
-  <rect x="22" y="22" width="956" height="3" rx="2" fill="url(#k-edge)"/>
-  <text x="50" y="58" font-family="ui-monospace,monospace" font-size="11" font-weight="700" letter-spacing="3" fill="${accent}">THIRUKURAL / DAILY</text>
-  <text x="950" y="58" text-anchor="end" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">NO. ${kural.number} / 1330</text>
-  <text x="948" y="239" text-anchor="end" font-family="ui-monospace,monospace" font-size="118" font-weight="800" fill="${accent}" opacity=".055">${kural.number}</text>
-  <path d="M50 79H950" stroke="${quiet}" opacity=".2"/>
-  <text x="50" y="122" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[0])}</text>
-  <text x="50" y="160" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[1])}</text>
-  <rect x="50" y="187" width="42" height="2" fill="${accent}"/>
-  <text x="50" y="225" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english[0])}</text>
-  ${english[1] ? `<text x="50" y="251" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english.slice(1).join("; "))}</text>` : ""}
-  <circle cx="951" cy="250" r="4" fill="${accent}"/>
+  <rect width="1000" height="300" fill="${background}"/>
+  <path d="M28 28H972V272H28Z" fill="none" stroke="${ink}" stroke-width="2"/>
+  <path d="M790 28V272M28 76H972" stroke="${ink}" opacity=".35"/>
+  <rect x="28" y="28" width="7" height="48" fill="${accent}"/>
+  <text x="52" y="59" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">THIRUKURAL OF THE DAY</text>
+  <text x="942" y="184" text-anchor="end" font-family="Georgia,serif" font-size="92" font-weight="700" fill="${ink}">${kural.number}</text>
+  <text x="942" y="213" text-anchor="end" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">OF 1330</text>
+  <text x="52" y="119" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[0])}</text>
+  <text x="52" y="158" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[1])}</text>
+  <path d="M52 187H94" stroke="${accent}" stroke-width="3"/>
+  <text x="52" y="221" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english[0])}</text>
+  ${english[1] ? `<text x="52" y="247" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english.slice(1).join("; "))}</text>` : ""}
 </svg>`;
 };
 await Promise.all([
@@ -221,7 +204,7 @@ const kuralStart = "<!-- THIRUKKURAL:START -->";
 const kuralEnd = "<!-- THIRUKKURAL:END -->";
 const dailyKural = `${kuralStart}
 <details>
-<summary><b>Read and copy the couplet</b></summary>
+<summary>Copy the couplet</summary>
 <br>
 
 > ${kural.tamil[0]}<br>
@@ -229,7 +212,7 @@ const dailyKural = `${kuralStart}
 >
 > ${englishLines[0]}${englishLines.length > 1 ? "<br>\n> " + englishLines.slice(1).join("; ") : ""}${/[.!?]$/.test(kural.english) ? "" : "."}
 
-<sub>Kural ${kural.number} · Changes every day · English translation by G. U. Pope</sub>
+<sub>Kural ${kural.number} · English translation by G. U. Pope</sub>
 
 </details>
 ${kuralEnd}`;
