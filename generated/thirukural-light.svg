@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
+  <title id="k-title">Thirukural of the day: Kural 718</title>
+  <desc id="k-desc">உணர்வ துடையார்முன் சொல்லல் வளர்வதன் பாத்தியுள் நீர்சொரிந் தற்று. To speak where understanding hearers you obtain,Is sprinkling water on the fields of growing grain</desc>
+  <defs>
+    <pattern id="k-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#007d8a" opacity=".05"/></pattern>
+    <linearGradient id="k-edge" x1="0" x2="1"><stop stop-color="#007d8a"/><stop offset="1" stop-color="#007d8a" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1000" height="300" rx="12" fill="#f4f5f2"/><rect width="1000" height="300" rx="12" fill="url(#k-grid)"/>
+  <rect x="22" y="22" width="956" height="256" rx="9" fill="#ffffff" stroke="#66717b" stroke-opacity=".28"/>
+  <rect x="22" y="22" width="956" height="3" rx="2" fill="url(#k-edge)"/>
+  <text x="50" y="58" font-family="ui-monospace,monospace" font-size="11" font-weight="700" letter-spacing="3" fill="#007d8a">THIRUKURAL / DAILY</text>
+  <text x="950" y="58" text-anchor="end" font-family="ui-monospace,monospace" font-size="12" fill="#66717b">NO. 718 / 1330</text>
+  <text x="948" y="239" text-anchor="end" font-family="ui-monospace,monospace" font-size="118" font-weight="800" fill="#007d8a" opacity=".055">718</text>
+  <path d="M50 79H950" stroke="#66717b" opacity=".2"/>
+  <text x="50" y="122" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="#111820">உணர்வ துடையார்முன் சொல்லல் வளர்வதன்</text>
+  <text x="50" y="160" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="#111820">பாத்தியுள் நீர்சொரிந் தற்று.</text>
+  <rect x="50" y="187" width="42" height="2" fill="#007d8a"/>
+  <text x="50" y="225" font-family="Georgia,serif" font-size="17" font-style="italic" fill="#66717b">To speak where understanding hearers you obtain,Is sprinkling water on the fields of growing</text>
+  <text x="50" y="251" font-family="Georgia,serif" font-size="17" font-style="italic" fill="#66717b">grain</text>
+  <circle cx="951" cy="250" r="4" fill="#007d8a"/>
+</svg>
