@@ -3,7 +3,8 @@ name: Render commit page
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 0 * * *"
+    # 00:05 in Asia/Kolkata
+    - cron: "35 18 * * *"
   push:
     branches: [main]
     paths:

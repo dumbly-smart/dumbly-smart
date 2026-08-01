@@ -18,6 +18,18 @@ I'm interested in the parts of software that are usually hidden behind the inter
 
 Most of my time goes into defensive security, reverse engineering, applied cryptography, and self-hosted systems. I like building small tools that explain what they are doing instead of asking to be trusted. When I'm away from a terminal, I'm probably reading manga or rebuilding some part of my Linux setup that was working perfectly well before I touched it.
 
+## Thirukkural for today
+
+<!-- THIRUKKURAL:START -->
+> உணர்வ துடையார்முன் சொல்லல் வளர்வதன்<br>
+> பாத்தியுள் நீர்சொரிந் தற்று.
+>
+> To speak where understanding hearers you obtain,<br>
+> Is sprinkling water on the fields of growing grain.
+
+<sub>Kural 718 · Changes every day · English translation by G. U. Pope</sub>
+<!-- THIRUKKURAL:END -->
+
 ## Selected projects
 
 <details open>

@@ -148,7 +148,7 @@ await Promise.all([
   writeFile("generated/activity.json", `${JSON.stringify(stats, null, 2)}\n`),
 ]);
 
-const readme = await readFile("README.md", "utf8");
+let readme = await readFile("README.md", "utf8");
 const start = "<!-- ACTIVITY_DETAILS:START -->";
 const end = "<!-- ACTIVITY_DETAILS:END -->";
 const details = `${start}
@@ -164,5 +164,30 @@ The dashboard counts public commits separately from other GitHub contributions s
 ${end}`;
 const activityPattern = new RegExp(`${start}[\\s\\S]*?${end}`);
 if (!activityPattern.test(readme)) throw new Error("README activity markers are missing");
-await writeFile("README.md", readme.replace(activityPattern, details));
+readme = readme.replace(activityPattern, details);
+
+const kurals = JSON.parse(await readFile("data/kurals.json", "utf8"));
+if (kurals.length !== 1330) throw new Error(`Expected 1330 Kurals, found ${kurals.length}`);
+const todayInIndia = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
+const dayNumber = Math.floor(Date.parse(`${todayInIndia}T00:00:00Z`) / 86_400_000);
+const kural = kurals[dayNumber % kurals.length];
+const englishLines = kural.english.split(";").map((line) => line.trim());
+const kuralStart = "<!-- THIRUKKURAL:START -->";
+const kuralEnd = "<!-- THIRUKKURAL:END -->";
+const dailyKural = `${kuralStart}
+> ${kural.tamil[0]}<br>
+> ${kural.tamil[1]}
+>
+> ${englishLines[0]}${englishLines.length > 1 ? "<br>\n> " + englishLines.slice(1).join("; ") : ""}${/[.!?]$/.test(kural.english) ? "" : "."}
+
+<sub>Kural ${kural.number} · Changes every day · English translation by G. U. Pope</sub>
+${kuralEnd}`;
+const kuralPattern = new RegExp(`${kuralStart}[\\s\\S]*?${kuralEnd}`);
+if (!kuralPattern.test(readme)) throw new Error("README Thirukkural markers are missing");
+await writeFile("README.md", readme.replace(kuralPattern, dailyKural));
 console.log(stats);
