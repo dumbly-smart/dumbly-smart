@@ -104,15 +104,15 @@ function render(theme) {
     return `<rect x="${51 + i * 19}" y="${325 - height}" width="12" height="${height}" rx="2" fill="${accent}" opacity="${day.contributionCount ? ".9" : ".16"}"><title>${day.date}: ${day.contributionCount}</title></rect>`;
   }).join("");
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="455" viewBox="0 0 1000 455" role="img" aria-labelledby="title desc">
   <title id="title">${esc(login)} commit data</title>
   <desc id="desc">One year of GitHub activity, updated daily.</desc>
   <metadata>${esc(JSON.stringify(stats))}</metadata>
-  <rect width="1000" height="420" fill="${paper}"/>
-  <path d="M28 28H972M28 392H972M28 28V392M972 28V392" stroke="${ink}" stroke-width="2"/>
+  <rect width="1000" height="455" fill="${paper}"/>
+  <path d="M28 28H972M28 427H972M28 28V427M972 28V427" stroke="${ink}" stroke-width="2"/>
   <text x="48" y="62" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">GITHUB / LAST 365 DAYS</text>
   <text x="952" y="62" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} — ${esc(stats.period.to)}</text>
-  <path d="M28 80H972M28 186H972M660 80V392" stroke="${ink}" opacity=".3"/>
+  <path d="M28 80H972M28 186H972M660 80V427" stroke="${ink}" opacity=".3"/>
   <text x="48" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS</text>
   <text x="48" y="166" font-family="Georgia,serif" font-size="62" font-weight="700" fill="${ink}">${commits}</text>
   <text x="220" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTIONS</text><text x="220" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${calendar.totalContributions}</text>
@@ -165,8 +165,9 @@ const todayInIndia = new Intl.DateTimeFormat("en-CA", {
 }).format(new Date());
 const dayNumber = Math.floor(Date.parse(`${todayInIndia}T00:00:00Z`) / 86_400_000);
 const kural = kurals[dayNumber % kurals.length];
-const englishLines = kural.english.split(";").map((line) => line.trim());
-const wrapWords = (text, width = 92) => text.split(/\s+/).reduce((lines, word) => {
+const normalizedEnglish = kural.english.replace(/([,;])(?=\S)/g, "$1 ");
+const englishLines = normalizedEnglish.split(";").map((line) => line.trim());
+const wrapWords = (text, width = 78) => text.split(/\s+/).reduce((lines, word) => {
   const last = lines.at(-1);
   if (!last || `${last} ${word}`.length > width) lines.push(word);
   else lines[lines.length - 1] = `${last} ${word}`;
@@ -178,7 +179,7 @@ const kuralXml = (theme) => {
   const ink = dark ? "#eeeae0" : "#171717";
   const quiet = dark ? "#99958d" : "#68645d";
   const accent = "#c43b2f";
-  const english = wrapWords(kural.english.replace(/;/g, "; "));
+  const english = wrapWords(normalizedEnglish);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
   <title id="k-title">Thirukural of the day: Kural ${kural.number}</title>
   <desc id="k-desc">${esc(kural.tamil.join(" "))} ${esc(kural.english)}</desc>
