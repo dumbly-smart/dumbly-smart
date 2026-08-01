@@ -177,15 +177,61 @@ const todayInIndia = new Intl.DateTimeFormat("en-CA", {
 const dayNumber = Math.floor(Date.parse(`${todayInIndia}T00:00:00Z`) / 86_400_000);
 const kural = kurals[dayNumber % kurals.length];
 const englishLines = kural.english.split(";").map((line) => line.trim());
+const wrapWords = (text, width = 92) => text.split(/\s+/).reduce((lines, word) => {
+  const last = lines.at(-1);
+  if (!last || `${last} ${word}`.length > width) lines.push(word);
+  else lines[lines.length - 1] = `${last} ${word}`;
+  return lines;
+}, []);
+const kuralXml = (theme) => {
+  const dark = theme === "dark";
+  const background = dark ? "#090d12" : "#f4f5f2";
+  const panel = dark ? "#111820" : "#ffffff";
+  const ink = dark ? "#f1f4f5" : "#111820";
+  const quiet = dark ? "#85919d" : "#66717b";
+  const accent = dark ? "#7df9ff" : "#007d8a";
+  const english = wrapWords(kural.english.replace(/;/g, "; "));
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
+  <title id="k-title">Thirukural of the day: Kural ${kural.number}</title>
+  <desc id="k-desc">${esc(kural.tamil.join(" "))} ${esc(kural.english)}</desc>
+  <defs>
+    <pattern id="k-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="${accent}" opacity=".05"/></pattern>
+    <linearGradient id="k-edge" x1="0" x2="1"><stop stop-color="${accent}"/><stop offset="1" stop-color="${accent}" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1000" height="300" rx="12" fill="${background}"/><rect width="1000" height="300" rx="12" fill="url(#k-grid)"/>
+  <rect x="22" y="22" width="956" height="256" rx="9" fill="${panel}" stroke="${quiet}" stroke-opacity=".28"/>
+  <rect x="22" y="22" width="956" height="3" rx="2" fill="url(#k-edge)"/>
+  <text x="50" y="58" font-family="ui-monospace,monospace" font-size="11" font-weight="700" letter-spacing="3" fill="${accent}">THIRUKURAL / DAILY</text>
+  <text x="950" y="58" text-anchor="end" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">NO. ${kural.number} / 1330</text>
+  <text x="948" y="239" text-anchor="end" font-family="ui-monospace,monospace" font-size="118" font-weight="800" fill="${accent}" opacity=".055">${kural.number}</text>
+  <path d="M50 79H950" stroke="${quiet}" opacity=".2"/>
+  <text x="50" y="122" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[0])}</text>
+  <text x="50" y="160" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[1])}</text>
+  <rect x="50" y="187" width="42" height="2" fill="${accent}"/>
+  <text x="50" y="225" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english[0])}</text>
+  ${english[1] ? `<text x="50" y="251" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english.slice(1).join("; "))}</text>` : ""}
+  <circle cx="951" cy="250" r="4" fill="${accent}"/>
+</svg>`;
+};
+await Promise.all([
+  writeFile("generated/thirukural-dark.svg", kuralXml("dark")),
+  writeFile("generated/thirukural-light.svg", kuralXml("light")),
+]);
 const kuralStart = "<!-- THIRUKKURAL:START -->";
 const kuralEnd = "<!-- THIRUKKURAL:END -->";
 const dailyKural = `${kuralStart}
+<details>
+<summary><b>Read and copy the couplet</b></summary>
+<br>
+
 > ${kural.tamil[0]}<br>
 > ${kural.tamil[1]}
 >
 > ${englishLines[0]}${englishLines.length > 1 ? "<br>\n> " + englishLines.slice(1).join("; ") : ""}${/[.!?]$/.test(kural.english) ? "" : "."}
 
 <sub>Kural ${kural.number} · Changes every day · English translation by G. U. Pope</sub>
+
+</details>
 ${kuralEnd}`;
 const kuralPattern = new RegExp(`${kuralStart}[\\s\\S]*?${kuralEnd}`);
 if (!kuralPattern.test(readme)) throw new Error("README Thirukkural markers are missing");
