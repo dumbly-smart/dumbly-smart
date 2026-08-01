@@ -14,8 +14,7 @@
 > உணர்வ துடையார்முன் சொல்லல் வளர்வதன்<br>
 > பாத்தியுள் நீர்சொரிந் தற்று.
 >
-> To speak where understanding hearers you obtain,<br>
-> Is sprinkling water on the fields of growing grain.
+> To speak where understanding hearers you obtain,Is sprinkling water on the fields of growing grain.
 
 <sub>Kural 718 · English translation by G. U. Pope</sub>
 
