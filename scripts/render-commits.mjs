@@ -83,6 +83,7 @@ function render(theme) {
   const ink = dark ? "#e8e6df" : "#111111";
   const paper = dark ? "#0c0d0f" : "#f3f0e8";
   const quiet = dark ? "#73777f" : "#77736a";
+  const rule = dark ? "#343434" : "#c9c5bc";
   const accent = "#c43b2f";
   const cell = 7;
   const gap = 3;
@@ -109,10 +110,10 @@ function render(theme) {
   <desc id="desc">One year of GitHub activity, updated daily.</desc>
   <metadata>${esc(JSON.stringify(stats))}</metadata>
   <rect width="1000" height="455" fill="${paper}"/>
-  <path d="M28 28H972M28 427H972M28 28V427M972 28V427" stroke="${ink}" stroke-width="2"/>
+  <path d="M28 76H972M28 427H972" stroke="${rule}"/>
   <text x="48" y="62" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">GITHUB / LAST 365 DAYS</text>
   <text x="952" y="62" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} — ${esc(stats.period.to)}</text>
-  <path d="M28 80H972M28 186H972M660 80V427" stroke="${ink}" opacity=".3"/>
+  <path d="M28 186H972M660 76V427" stroke="${rule}"/>
   <text x="48" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">PUBLIC COMMITS</text>
   <text x="48" y="166" font-family="Georgia,serif" font-size="62" font-weight="700" fill="${ink}">${commits}</text>
   <text x="220" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTIONS</text><text x="220" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${calendar.totalContributions}</text>
@@ -120,7 +121,7 @@ function render(theme) {
   <text x="525" y="112" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">ACTIVE DAYS</text><text x="525" y="163" font-family="Georgia,serif" font-size="46" fill="${ink}">${active.length}</text>
   <text x="48" y="215" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">LAST 30 DAYS</text>
   ${bars}
-  <path d="M48 337H638" stroke="${ink}" opacity=".25"/>
+  <path d="M48 337H638" stroke="${rule}"/>
   <text x="49" y="351" font-family="ui-monospace,monospace" font-size="9" letter-spacing="2" fill="${quiet}">THE YEAR</text>
   ${cells}
   <text x="700" y="218" font-family="Georgia,serif" font-size="22" fill="${ink}">Recent</text>
@@ -178,16 +179,16 @@ const kuralXml = (theme) => {
   const background = dark ? "#111111" : "#f2efe7";
   const ink = dark ? "#eeeae0" : "#171717";
   const quiet = dark ? "#99958d" : "#68645d";
+  const rule = dark ? "#343434" : "#c9c5bc";
   const accent = "#c43b2f";
   const english = wrapWords(normalizedEnglish);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
   <title id="k-title">Thirukural of the day: Kural ${kural.number}</title>
   <desc id="k-desc">${esc(kural.tamil.join(" "))} ${esc(kural.english)}</desc>
   <rect width="1000" height="300" fill="${background}"/>
-  <path d="M28 28H972V272H28Z" fill="none" stroke="${ink}" stroke-width="2"/>
-  <path d="M790 28V272M28 76H972" stroke="${ink}" opacity=".35"/>
-  <rect x="28" y="28" width="7" height="48" fill="${accent}"/>
-  <text x="52" y="59" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">THIRUKURAL OF THE DAY</text>
+  <path d="M28 76H972M790 76V262M28 262H972" stroke="${rule}"/>
+  <rect x="28" y="45" width="28" height="3" fill="${accent}"/>
+  <text x="70" y="51" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">THIRUKURAL OF THE DAY</text>
   <text x="942" y="184" text-anchor="end" font-family="Georgia,serif" font-size="92" font-weight="700" fill="${ink}">${kural.number}</text>
   <text x="942" y="213" text-anchor="end" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">OF 1330</text>
   <text x="52" y="119" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[0])}</text>
@@ -219,5 +220,9 @@ const dailyKural = `${kuralStart}
 ${kuralEnd}`;
 const kuralPattern = new RegExp(`${kuralStart}[\\s\\S]*?${kuralEnd}`);
 if (!kuralPattern.test(readme)) throw new Error("README Thirukkural markers are missing");
-await writeFile("README.md", readme.replace(kuralPattern, dailyKural));
+readme = readme.replace(kuralPattern, dailyKural);
+readme = readme
+  .replace(/(generated\/thirukural-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${todayInIndia}`)
+  .replace(/(generated\/commit-page-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${stats.generatedAt.slice(0, 10)}`);
+await writeFile("README.md", readme);
 console.log(stats);
