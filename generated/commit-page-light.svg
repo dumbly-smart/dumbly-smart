@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="510" viewBox="0 0 700 510" role="img" aria-label="Commit page awaiting first sync">
+  <rect width="700" height="510" fill="#f3f0e8"/><rect x="20" y="20" width="660" height="470" fill="none" stroke="#111111" stroke-width="12"/>
+  <text x="48" y="90" fill="#77736a" font-family="monospace" font-size="13" letter-spacing="3">COMMIT PAGE / INITIALIZING</text>
+  <path d="M48 130H652M48 380H652" stroke="#111111" stroke-width="3"/>
+  <text x="48" y="250" fill="#111111" font-family="monospace" font-size="42" font-weight="bold">AWAITING FIRST SYNC</text>
+  <text x="48" y="420" fill="#77736a" font-family="monospace" font-size="12">github actions will compile the first edition</text>
+</svg>
