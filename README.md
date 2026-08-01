@@ -1,9 +1,9 @@
 ## Thirukural of the day
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg">
-  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-02">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-02">
+  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-02">
 </picture>
 
 <!-- THIRUKKURAL:START -->
@@ -24,9 +24,9 @@
 ## Commit data
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg">
-  <img width="100%" alt="GitHub commit data" src="./generated/commit-page-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg?v=2026-08-01">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg?v=2026-08-01">
+  <img width="100%" alt="GitHub commit data" src="./generated/commit-page-light.svg?v=2026-08-01">
 </picture>
 
 <!-- ACTIVITY_DETAILS:START -->

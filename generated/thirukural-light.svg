@@ -2,10 +2,9 @@
   <title id="k-title">Thirukural of the day: Kural 718</title>
   <desc id="k-desc">உணர்வ துடையார்முன் சொல்லல் வளர்வதன் பாத்தியுள் நீர்சொரிந் தற்று. To speak where understanding hearers you obtain,Is sprinkling water on the fields of growing grain</desc>
   <rect width="1000" height="300" fill="#f2efe7"/>
-  <path d="M28 28H972V272H28Z" fill="none" stroke="#171717" stroke-width="2"/>
-  <path d="M790 28V272M28 76H972" stroke="#171717" opacity=".35"/>
-  <rect x="28" y="28" width="7" height="48" fill="#c43b2f"/>
-  <text x="52" y="59" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="#68645d">THIRUKURAL OF THE DAY</text>
+  <path d="M28 76H972M790 76V262M28 262H972" stroke="#c9c5bc"/>
+  <rect x="28" y="45" width="28" height="3" fill="#c43b2f"/>
+  <text x="70" y="51" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="#68645d">THIRUKURAL OF THE DAY</text>
   <text x="942" y="184" text-anchor="end" font-family="Georgia,serif" font-size="92" font-weight="700" fill="#171717">718</text>
   <text x="942" y="213" text-anchor="end" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="#68645d">OF 1330</text>
   <text x="52" y="119" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="#171717">உணர்வ துடையார்முன் சொல்லல் வளர்வதன்</text>
