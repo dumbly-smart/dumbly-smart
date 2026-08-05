@@ -1,9 +1,9 @@
 ## Thirukural of the day
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-05">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-05">
-  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-05">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-06">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-06">
+  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-06">
 </picture>
 
 <!-- THIRUKKURAL:START -->
@@ -11,12 +11,12 @@
 <summary>Copy the couplet</summary>
 <br>
 
-> வகையறிந்து வல்லவை வாய்சோரார் சொல்லின்<br>
-> தொகையறிந்த தூய்மை யவர்.
+> கற்றாருள் கற்றார் எனப்படுவர் கற்றார்முன்<br>
+> கற்ற செலச்சொல்லு வார்.
 >
-> Men, pure in heart, who know of words the varied force, The mighty council's moods discern, nor fail in their discourse.
+> Who what they've learned, in penetrating words heve learned to say, Before the learn'd among the learn'd most learn'd are they.
 
-<sub>Kural 721 · English translation by G. U. Pope</sub>
+<sub>Kural 722 · English translation by G. U. Pope</sub>
 
 </details>
 <!-- THIRUKKURAL:END -->
@@ -24,9 +24,9 @@
 ## Commit data
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg?v=2026-08-04">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg?v=2026-08-04">
-  <img width="100%" alt="GitHub commit data" src="./generated/commit-page-light.svg?v=2026-08-04">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg?v=2026-08-05">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg?v=2026-08-05">
+  <img width="100%" alt="GitHub commit data" src="./generated/commit-page-light.svg?v=2026-08-05">
 </picture>
 
 <!-- ACTIVITY_DETAILS:START -->
