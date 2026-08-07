@@ -1,9 +1,9 @@
 ## Thirukural of the day
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-07">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-07">
-  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-07">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-08">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-08">
+  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-08">
 </picture>
 
 <!-- THIRUKKURAL:START -->
@@ -11,13 +11,13 @@
 <summary>Copy the couplet</summary>
 <br>
 
-> பகையகத்துச் சாவார் எளியர் அரியர்<br>
-> அவையகத்து அஞ்சா தவர்.
+> கற்றார்முன் கற்ற செலச்சொல்லித் தாம்கற்ற<br>
+> மிக்காருள் மிக்க கொளல்.
 >
-> Many encountering death in face of foe will hold their ground<br>
-> Who speak undaunted in the council hall are rarely found.
+> What you have learned, in penetrating words speak out beforeThe learn'd<br>
+> but learn what men more learn'd can teach you more.
 
-<sub>Kural 723 · English translation by G. U. Pope</sub>
+<sub>Kural 724 · English translation by G. U. Pope</sub>
 
 </details>
 <!-- THIRUKKURAL:END -->
@@ -35,7 +35,7 @@
 <summary>Read the numbers</summary>
 <br>
 
-Over the past year, I made **242 public commits** across **30 active days**. I have made **28 contributions this week** and **107 in the last 30 days**. My current streak is **0 days**.
+Over the past year, I made **250 public commits** across **31 active days**. I have made **36 contributions this week** and **115 in the last 30 days**. My current streak is **1 day**.
 
 [Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
 
