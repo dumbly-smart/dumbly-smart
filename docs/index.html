@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07110a" />
+    <meta name="description" content="Repair dumbly-smart's contribution timeline in an interactive old-school debugger." />
+    <title>DEBUG THE TIMELINE</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="crt" aria-hidden="true"></div>
+    <main class="terminal" id="terminal">
+      <header class="topbar">
+        <div class="brand"><span class="prompt">A:\&gt;</span> CHRONO_DEBUG.EXE</div>
+        <div class="top-actions">
+          <span id="clock">00:00:00</span>
+          <button class="key-button" id="sound-toggle" type="button" aria-pressed="false">SOUND: OFF</button>
+        </div>
+      </header>
+
+      <section class="boot-panel" id="boot-panel" aria-live="polite">
+        <pre id="boot-log"></pre>
+        <button class="primary hidden" id="start-button" type="button">[ ENTER ] INITIALIZE DEBUGGER</button>
+      </section>
+
+      <section class="workspace hidden" id="workspace">
+        <div class="statusline">
+          <span>SESSION: <strong id="session-status">ACTIVE</strong></span>
+          <span>SECTORS: <strong id="sector-count">00/--</strong></span>
+          <span>HEALTH: <strong id="health">00%</strong></span>
+          <span>FAULTS: <strong id="fault-count">--</strong></span>
+        </div>
+
+        <div class="layout">
+          <nav class="sector-panel panel" aria-label="Timeline sectors">
+            <div class="panel-title">MEMORY MAP / LIVE SECTORS</div>
+            <div class="sector-list" id="sector-list"></div>
+            <button class="secondary" id="reset-button" type="button">RESET SESSION</button>
+          </nav>
+
+          <section class="main-panel panel">
+            <div class="panel-title">
+              <span id="sector-title">SELECT A SECTOR</span>
+              <span id="sector-address">----</span>
+            </div>
+            <div class="month-grid" id="month-grid" aria-label="Contribution days"></div>
+            <div class="diagnostic" id="diagnostic">
+              <p class="muted">Select a corrupted sector to inspect its contribution memory.</p>
+            </div>
+          </section>
+
+          <aside class="inspector panel">
+            <div class="panel-title">WATCH</div>
+            <dl class="watch-list">
+              <div><dt>USER</dt><dd id="watch-user">----</dd></div>
+              <div><dt>PERIOD</dt><dd id="watch-period">----</dd></div>
+              <div><dt>CONTRIB</dt><dd id="watch-total">0</dd></div>
+              <div><dt>COMMITS</dt><dd id="watch-commits">0</dd></div>
+              <div><dt>STREAK</dt><dd id="watch-streak">0</dd></div>
+              <div><dt>PEAK</dt><dd id="watch-peak">0</dd></div>
+            </dl>
+            <div class="legend">
+              <span><i class="cell level-0"></i> idle</span>
+              <span><i class="cell level-2"></i> active</span>
+              <span><i class="cell level-4"></i> hot</span>
+              <span><i class="cell repaired"></i> fixed</span>
+            </div>
+            <div class="event-log" id="event-log" aria-live="polite"></div>
+          </aside>
+        </div>
+
+        <footer class="helpbar">
+          <span><kbd>↑</kbd><kbd>↓</kbd> sector</span>
+          <span><kbd>ENTER</kbd> inspect</span>
+          <span><kbd>ESC</kbd> close repair</span>
+          <a href="https://github.com/dumbly-smart" rel="noreferrer">RETURN TO PROFILE ↗</a>
+        </footer>
+      </section>
+    </main>
+
+    <dialog id="repair-dialog" aria-labelledby="repair-title">
+      <div class="dialog-titlebar">
+        <span id="repair-title">FAULT ISOLATION</span>
+        <button id="close-dialog" type="button" aria-label="Close repair">[X]</button>
+      </div>
+      <div class="dialog-body" id="puzzle-host"></div>
+      <div class="dialog-actions">
+        <span id="attempt-counter">ATTEMPT 1</span>
+        <button class="secondary hidden" id="hint-button" type="button">REQUEST HINT</button>
+        <button class="secondary hidden" id="bypass-button" type="button">BYPASS FAULT</button>
+      </div>
+    </dialog>
+
+    <template id="route-template">
+      <div class="puzzle-copy">
+        <p>FAULT 0x17: SIGNAL PATH INTERRUPTED</p>
+        <p class="muted">Rotate every relay until one continuous route connects IN to OUT.</p>
+      </div>
+      <div class="route-board" data-puzzle="route"></div>
+      <button class="primary verify-button" type="button">RUN SIGNAL TEST</button>
+    </template>
+
+    <template id="memory-template">
+      <div class="puzzle-copy">
+        <p>FAULT 0x2A: MEMORY CHECKSUM MISMATCH</p>
+        <p class="muted">Memorize the lit bytes, then restore the same pattern.</p>
+      </div>
+      <div class="memory-board" data-puzzle="memory"></div>
+      <div class="memory-countdown">CAPTURE IN <span>3</span></div>
+      <button class="primary verify-button hidden" type="button">VERIFY CHECKSUM</button>
+    </template>
+
+    <template id="logs-template">
+      <div class="puzzle-copy">
+        <p>FAULT 0x3C: LOG INDEX CORRUPTED</p>
+        <p class="muted">Select the records from oldest to newest. Contribution counts are real.</p>
+      </div>
+      <div class="log-board" data-puzzle="logs"></div>
+      <div class="log-sequence" aria-live="polite"></div>
+      <button class="secondary clear-log-button" type="button">CLEAR SELECTION</button>
+      <button class="primary verify-button" type="button">REBUILD INDEX</button>
+    </template>
+
+    <script type="module" src="./game.js"></script>
+  </body>
+</html>

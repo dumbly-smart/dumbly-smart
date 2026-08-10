@@ -21,22 +21,24 @@
 </details>
 <!-- THIRUKKURAL:END -->
 
-## Commit data
+## Debug the timeline
 
+<a href="https://dumbly-smart.github.io/dumbly-smart/">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/commit-page-dark.svg?v=2026-08-09">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/commit-page-light.svg?v=2026-08-09">
-  <img width="100%" alt="GitHub commit data" src="./generated/commit-page-light.svg?v=2026-08-09">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/debugger-dark.svg?v=2026-08-10">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/debugger-light.svg?v=2026-08-10">
+  <img width="100%" alt="Play Debug the Timeline, an old-school game generated from my GitHub activity" src="./generated/debugger-light.svg?v=2026-08-10">
 </picture>
+</a>
 
 <!-- ACTIVITY_DETAILS:START -->
 <details>
-<summary>Read the numbers</summary>
+<summary>How the timeline was compiled</summary>
 <br>
 
-Over the past year, I made **269 public commits** across **33 active days**. I have made **36 contributions this week** and **130 in the last 30 days**. My current streak is **3 days**.
+The **13 calendar sectors** are generated from **272 public commits** across **33 active days**. Each month selects a deterministic signal-routing, memory, or log-recovery puzzle. The activity cells contain the real daily counts; no private commit data is exposed.
 
-[Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
+[Play the debugger](https://dumbly-smart.github.io/dumbly-smart/) · [Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
 
 </details>
 <!-- ACTIVITY_DETAILS:END -->
