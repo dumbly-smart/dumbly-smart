@@ -119,7 +119,7 @@ function updateStats() {
   ui.faults.textContent = String(state.months.length - complete).padStart(2, "0");
   if (complete === state.months.length) {
     ui.session.textContent = "TIMELINE RESTORED";
-    ui.session.style.color = "var(--green)";
+    ui.session.style.color = "var(--phosphor)";
   }
 }
 
