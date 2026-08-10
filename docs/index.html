@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#07110a" />
     <meta name="description" content="Repair dumbly-smart's contribution timeline in an interactive old-school debugger." />
-    <title>DEBUG THE TIMELINE</title>
+    <title>debug-timeline — bash</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="crt" aria-hidden="true"></div>
     <main class="terminal" id="terminal">
       <header class="topbar">
-        <div class="brand"><span class="prompt">A:\&gt;</span> CHRONO_DEBUG.EXE</div>
+        <div class="brand"><span class="prompt">dumbly-smart@github:~$</span> ./debug-timeline</div>
         <div class="top-actions">
           <span id="clock">00:00:00</span>
           <button class="key-button" id="sound-toggle" type="button" aria-pressed="false">SOUND: OFF</button>
@@ -21,7 +21,7 @@
 
       <section class="boot-panel" id="boot-panel" aria-live="polite">
         <pre id="boot-log"></pre>
-        <button class="primary hidden" id="start-button" type="button">[ ENTER ] INITIALIZE DEBUGGER</button>
+        <button class="primary hidden" id="start-button" type="button">[ ENTER ] RUN DEBUGGER</button>
       </section>
 
       <section class="workspace hidden" id="workspace">

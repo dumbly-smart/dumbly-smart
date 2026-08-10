@@ -111,8 +111,8 @@ function render(theme) {
   }).join("");
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="455" viewBox="0 0 1000 455" role="img" aria-labelledby="title desc">
-  <title id="title">Debug ${esc(login)}&apos;s contribution timeline</title>
-  <desc id="desc">A playable old-school debugger generated from one year of GitHub activity.</desc>
+  <title id="title">${esc(login)}@github: debug contribution timeline</title>
+  <desc id="desc">A playable Bash terminal debugger generated from one year of GitHub activity.</desc>
   <metadata>${esc(JSON.stringify(stats))}</metadata>
   <defs><filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
   <style>
@@ -129,10 +129,10 @@ function render(theme) {
   <rect width="1000" height="455" rx="14" fill="${paper}"/>
   <rect x="20" y="20" width="960" height="415" rx="10" fill="${panel}" stroke="${rule}"/>
   <path d="M20 67H980" stroke="${rule}"/>
-  <circle cx="45" cy="44" r="6" fill="#ff5f56"/><circle cx="65" cy="44" r="6" fill="#ffbd2e"/><circle cx="85" cy="44" r="6" fill="#27c93f"/>
-  <text x="110" y="49" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">CHRONO_DEBUG.EXE / CONTRIBUTION MEMORY</text>
+  <text x="45" y="49" font-family="ui-monospace,monospace" font-size="16" font-weight="700" fill="#39d353">$_</text>
+  <text x="82" y="49" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">${esc(login)}@github:~ / GNU bash</text>
   <text x="955" y="49" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} → ${esc(stats.period.to)}</text>
-  <text x="46" y="100" font-family="ui-monospace,monospace" font-size="13" fill="#39d353">A:\&gt; chrono_debug --scan timeline.bin</text><rect class="cursor" x="390" y="87" width="8" height="16" fill="#39d353"/>
+  <text x="46" y="100" font-family="ui-monospace,monospace" font-size="13" fill="#39d353">${esc(login)}@github:~$ ./debug-timeline --scan</text><rect class="cursor" x="412" y="87" width="8" height="16" fill="#39d353"/>
   <g font-family="ui-monospace,monospace">
     <rect x="45" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="61" y="144" font-size="10" fill="${quiet}">PUBLIC COMMITS</text><text x="61" y="174" font-size="27" font-weight="700" fill="${ink}">${commits}</text>
     <rect x="263" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="279" y="144" font-size="10" fill="${quiet}">CONTRIBUTIONS</text><text x="279" y="174" font-size="27" font-weight="700" fill="#39d353">${calendar.totalContributions}</text>
@@ -164,90 +164,7 @@ await Promise.all([
 ]);
 
 let readme = await readFile("README.md", "utf8");
-const start = "<!-- ACTIVITY_DETAILS:START -->";
-const end = "<!-- ACTIVITY_DETAILS:END -->";
-const details = `${start}
-<details>
-<summary>How the timeline was compiled</summary>
-<br>
-
-The **${sectorCount} calendar sectors** are generated from **${commits} public commits** across **${active.length} active days**. Each month selects a deterministic signal-routing, memory, or log-recovery puzzle. The activity cells contain the real daily counts; no private commit data is exposed.
-
-[Play the debugger](https://dumbly-smart.github.io/dumbly-smart/) · [Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
-
-</details>
-${end}`;
-const activityPattern = new RegExp(`${start}[\\s\\S]*?${end}`);
-if (!activityPattern.test(readme)) throw new Error("README activity markers are missing");
-readme = readme.replace(activityPattern, details);
-
-const kurals = JSON.parse(await readFile("data/kurals.json", "utf8"));
-if (kurals.length !== 1330) throw new Error(`Expected 1330 Kurals, found ${kurals.length}`);
-const todayInIndia = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Asia/Kolkata",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(new Date());
-const dayNumber = Math.floor(Date.parse(`${todayInIndia}T00:00:00Z`) / 86_400_000);
-const kural = kurals[dayNumber % kurals.length];
-const normalizedEnglish = kural.english.replace(/([,;])(?=\S)/g, "$1 ");
-const englishLines = normalizedEnglish.split(";").map((line) => line.trim());
-const wrapWords = (text, width = 78) => text.split(/\s+/).reduce((lines, word) => {
-  const last = lines.at(-1);
-  if (!last || `${last} ${word}`.length > width) lines.push(word);
-  else lines[lines.length - 1] = `${last} ${word}`;
-  return lines;
-}, []);
-const kuralXml = (theme) => {
-  const dark = theme === "dark";
-  const background = dark ? "#111111" : "#f2efe7";
-  const ink = dark ? "#eeeae0" : "#171717";
-  const quiet = dark ? "#99958d" : "#68645d";
-  const rule = dark ? "#343434" : "#c9c5bc";
-  const accent = "#c43b2f";
-  const english = wrapWords(normalizedEnglish);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="k-title k-desc">
-  <title id="k-title">Thirukural of the day: Kural ${kural.number}</title>
-  <desc id="k-desc">${esc(kural.tamil.join(" "))} ${esc(kural.english)}</desc>
-  <rect width="1000" height="300" fill="${background}"/>
-  <path d="M28 76H972M790 76V262M28 262H972" stroke="${rule}"/>
-  <rect x="28" y="45" width="28" height="3" fill="${accent}"/>
-  <text x="70" y="51" font-family="ui-monospace,monospace" font-size="11" letter-spacing="3" fill="${quiet}">THIRUKURAL OF THE DAY</text>
-  <text x="942" y="184" text-anchor="end" font-family="Georgia,serif" font-size="92" font-weight="700" fill="${ink}">${kural.number}</text>
-  <text x="942" y="213" text-anchor="end" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">OF 1330</text>
-  <text x="52" y="119" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[0])}</text>
-  <text x="52" y="158" font-family="Noto Sans Tamil,Nirmala UI,Latha,sans-serif" font-size="24" font-weight="600" fill="${ink}">${esc(kural.tamil[1])}</text>
-  <path d="M52 187H94" stroke="${accent}" stroke-width="3"/>
-  <text x="52" y="221" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english[0])}</text>
-  ${english[1] ? `<text x="52" y="247" font-family="Georgia,serif" font-size="17" font-style="italic" fill="${quiet}">${esc(english.slice(1).join("; "))}</text>` : ""}
-</svg>`;
-};
-await Promise.all([
-  writeFile("generated/thirukural-dark.svg", kuralXml("dark")),
-  writeFile("generated/thirukural-light.svg", kuralXml("light")),
-]);
-const kuralStart = "<!-- THIRUKKURAL:START -->";
-const kuralEnd = "<!-- THIRUKKURAL:END -->";
-const dailyKural = `${kuralStart}
-<details>
-<summary>Copy the couplet</summary>
-<br>
-
-> ${kural.tamil[0]}<br>
-> ${kural.tamil[1]}
->
-> ${englishLines[0]}${englishLines.length > 1 ? "<br>\n> " + englishLines.slice(1).join("; ") : ""}${/[.!?]$/.test(kural.english) ? "" : "."}
-
-<sub>Kural ${kural.number} · English translation by G. U. Pope</sub>
-
-</details>
-${kuralEnd}`;
-const kuralPattern = new RegExp(`${kuralStart}[\\s\\S]*?${kuralEnd}`);
-if (!kuralPattern.test(readme)) throw new Error("README Thirukkural markers are missing");
-readme = readme.replace(kuralPattern, dailyKural);
 readme = readme
-  .replace(/(generated\/thirukural-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${todayInIndia}`)
   .replace(/(generated\/debugger-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${stats.generatedAt.slice(0, 10)}`);
 await writeFile("README.md", readme);
 console.log({ ...stats, days: stats.days.length });

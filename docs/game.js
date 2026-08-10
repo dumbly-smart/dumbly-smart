@@ -311,8 +311,8 @@ function completeRepair(bypassed = false) {
 
 async function boot() {
   const lines = [
-    "CHRONO DEBUGGER v1.0 (C) 2026 DUMBLY-SMART",
-    "Checking conventional memory ............ 640K OK",
+    "GNU bash, version 5.3.3(1)-release (x86_64-pc-linux-gnu)",
+    "dumbly-smart@github:~$ ./debug-timeline --scan",
     "Loading contribution address table ......",
   ];
   for (const line of lines) { ui.bootLog.textContent += `${line}\n`; await new Promise((resolve) => setTimeout(resolve, instantBoot ? 0 : 220)); }
