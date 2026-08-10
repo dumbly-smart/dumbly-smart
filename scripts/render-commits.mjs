@@ -164,7 +164,8 @@ await Promise.all([
 ]);
 
 let readme = await readFile("README.md", "utf8");
+const cacheKey = stats.generatedAt.replace(/\D/g, "").slice(0, 14);
 readme = readme
-  .replace(/(generated\/debugger-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${stats.generatedAt.slice(0, 10)}`);
+  .replace(/(generated\/debugger-(?:dark|light)\.svg)(?:\?v=[^"']*)?/g, `$1?v=${cacheKey}`);
 await writeFile("README.md", readme);
 console.log({ ...stats, days: stats.days.length });
