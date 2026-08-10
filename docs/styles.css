@@ -2,13 +2,13 @@
   color-scheme: dark;
   --black: #000;
   --panel: #000;
-  --raised: #001a08;
-  --green: #33ff66;
-  --green-dim: #16913a;
-  --green-faint: #083b18;
-  --amber: #ffcc33;
-  --red: #ff3333;
-  --line: #168a36;
+  --raised: #1a1000;
+  --green: #ffb000;
+  --green-dim: #9a6500;
+  --green-faint: #332000;
+  --amber: #ffe099;
+  --red: #ff5c57;
+  --line: #6f4900;
   font-family: "Courier New", Courier, monospace;
   font-size: 14px;
 }
@@ -186,12 +186,12 @@ button { color: inherit; }
 .day-cell.empty { visibility: hidden; }
 .day-cell .day-number { position: absolute; top: 4px; left: 5px; font-size: 10px; }
 .day-cell .day-count { position: absolute; right: 5px; bottom: 4px; font-weight: 700; }
-.day-cell.level-1 { color: #30c653; background: #001d08; }
-.day-cell.level-2 { color: #66ff88; background: #073e17; }
-.day-cell.level-3 { color: #000; background: #1f9e42; }
+.day-cell.level-1 { color: #c98200; background: #1a1000; }
+.day-cell.level-2 { color: #ffc24d; background: #493000; }
+.day-cell.level-3 { color: #000; background: #b47700; }
 .day-cell.level-4 { color: #000; background: var(--green); }
 .day-cell.sector-fixed { outline: 1px solid var(--amber); outline-offset: -1px; }
-.day-cell:hover, .day-cell:focus-visible { outline: 1px solid #fff; outline-offset: -1px; }
+.day-cell:hover, .day-cell:focus-visible { outline: 1px solid #ffe8b0; outline-offset: -1px; }
 
 .diagnostic { padding: 14px; line-height: 1.45; }
 .diagnostic h2 { margin: 0 0 8px; color: var(--amber); font-size: 16px; }
@@ -223,7 +223,7 @@ button { color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .cell { display: inline-block; width: 9px; height: 9px; margin-right: 4px; border: 1px solid var(--line); }
-.cell.level-2 { background: #073e17; }
+.cell.level-2 { background: #493000; }
 .cell.level-4 { background: var(--green); }
 .cell.repaired { border-color: var(--amber); background: var(--amber); }
 .event-log { padding: 8px; font-size: 11px; line-height: 1.45; color: var(--green-dim); }
@@ -292,7 +292,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .9); }
 .route-tile::after { width: 55%; height: 10%; left: 45%; top: 45%; }
 .route-tile.straight::after { left: 45%; width: 10%; height: 110%; top: -5%; }
 .route-tile.straight::before { display: none; }
-.route-tile:hover, .route-tile:focus-visible { outline: 1px solid #fff; outline-offset: -1px; }
+.route-tile:hover, .route-tile:focus-visible { outline: 1px solid #ffe8b0; outline-offset: -1px; }
 
 .memory-board {
   display: grid;
@@ -307,7 +307,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .9); }
 .memory-byte { width: 42px; height: 42px; border: 0; border-radius: 0; background: var(--black); cursor: pointer; }
 .memory-byte.on { background: var(--green); }
 .memory-byte.preview { pointer-events: none; }
-.memory-byte:hover, .memory-byte:focus-visible { outline: 1px solid #fff; outline-offset: -1px; }
+.memory-byte:hover, .memory-byte:focus-visible { outline: 1px solid #ffe8b0; outline-offset: -1px; }
 .memory-countdown { text-align: center; color: var(--amber); margin-bottom: 12px; }
 
 .log-board { display: grid; gap: 1px; margin: 14px 0 8px; border: 1px solid var(--line); background: var(--line); }
