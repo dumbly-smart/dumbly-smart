@@ -89,7 +89,7 @@ function render(theme) {
   const ink = "#f0f6fc";
   const quiet = "#8b949e";
   const rule = "#30363d";
-  const amberScale = ["#161b22", "#3b2a08", "#6b4800", "#b97800", "#ffb000"];
+  const green = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
   const cell = 10;
   const gap = 3;
   const gridX = 58;
@@ -102,12 +102,12 @@ function render(theme) {
     const y = gridY + (n % 7) * (cell + gap);
     const ratio = peak ? day.contributionCount / peak : 0;
     const level = day.contributionCount === 0 ? 0 : Math.min(4, Math.max(1, Math.ceil(ratio * 4)));
-    return `<rect class="day level-${level}" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${amberScale[level]}"><title>${day.date} · ${day.contributionCount} contribution${day.contributionCount === 1 ? "" : "s"}</title></rect>`;
+    return `<rect class="day level-${level}" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${green[level]}"><title>${day.date} · ${day.contributionCount} contribution${day.contributionCount === 1 ? "" : "s"}</title></rect>`;
   }).join("");
 
   const bars = days.slice(-30).map((day, i) => {
     const height = peak ? Math.max(3, Math.round((day.contributionCount / peak) * 54)) : 3;
-    return `<rect class="bar" x="${58 + i * 21}" y="${244 - height}" width="13" height="${height}" rx="3" fill="${day.contributionCount ? "#ffb000" : "#161b22"}" opacity="${day.contributionCount ? ".92" : "1"}" style="animation-delay:${(i * 35)}ms"><title>${day.date} · ${day.contributionCount}</title></rect>`;
+    return `<rect class="bar" x="${58 + i * 21}" y="${244 - height}" width="13" height="${height}" rx="3" fill="${day.contributionCount ? "#39d353" : "#161b22"}" opacity="${day.contributionCount ? ".92" : "1"}" style="animation-delay:${(i * 35)}ms"><title>${day.date} · ${day.contributionCount}</title></rect>`;
   }).join("");
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="455" viewBox="0 0 1000 455" role="img" aria-labelledby="title desc">
@@ -129,15 +129,15 @@ function render(theme) {
   <rect width="1000" height="455" rx="14" fill="${paper}"/>
   <rect x="20" y="20" width="960" height="415" rx="10" fill="${panel}" stroke="${rule}"/>
   <path d="M20 67H980" stroke="${rule}"/>
-  <text x="45" y="49" font-family="ui-monospace,monospace" font-size="16" font-weight="700" fill="#ffb000">$_</text>
+  <text x="45" y="49" font-family="ui-monospace,monospace" font-size="16" font-weight="700" fill="#39d353">$_</text>
   <text x="82" y="49" font-family="ui-monospace,monospace" font-size="12" fill="${quiet}">${esc(login)}@github:~ / GNU bash</text>
   <text x="955" y="49" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">${esc(stats.period.from)} → ${esc(stats.period.to)}</text>
-  <text x="46" y="100" font-family="ui-monospace,monospace" font-size="13" fill="#ffb000">${esc(login)}@github:~$ ./debug-timeline --scan</text><rect class="cursor" x="412" y="87" width="8" height="16" fill="#ffb000"/>
+  <text x="46" y="100" font-family="ui-monospace,monospace" font-size="13" fill="#39d353">${esc(login)}@github:~$ ./debug-timeline --scan</text><rect class="cursor" x="412" y="87" width="8" height="16" fill="#39d353"/>
   <g font-family="ui-monospace,monospace">
     <rect x="45" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="61" y="144" font-size="10" fill="${quiet}">PUBLIC COMMITS</text><text x="61" y="174" font-size="27" font-weight="700" fill="${ink}">${commits}</text>
-    <rect x="263" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="279" y="144" font-size="10" fill="${quiet}">CONTRIBUTIONS</text><text x="279" y="174" font-size="27" font-weight="700" fill="#ffb000">${calendar.totalContributions}</text>
+    <rect x="263" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="279" y="144" font-size="10" fill="${quiet}">CONTRIBUTIONS</text><text x="279" y="174" font-size="27" font-weight="700" fill="#39d353">${calendar.totalContributions}</text>
     <rect x="481" y="120" width="205" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="497" y="144" font-size="10" fill="${quiet}">CURRENT STREAK</text><text x="497" y="174" font-size="27" font-weight="700" fill="${ink}">${stats.currentStreak}<tspan font-size="12" fill="${quiet}"> days</tspan></text>
-    <rect x="699" y="120" width="256" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="715" y="144" font-size="10" fill="${quiet}">ACTIVE DAYS / PEAK</text><text x="715" y="174" font-size="27" font-weight="700" fill="${ink}">${active.length}<tspan font-size="12" fill="${quiet}"> days  ·  </tspan><tspan fill="#ffb000">${peak}</tspan></text>
+    <rect x="699" y="120" width="256" height="65" rx="7" fill="#0d1117" stroke="${rule}"/><text x="715" y="144" font-size="10" fill="${quiet}">ACTIVE DAYS / PEAK</text><text x="715" y="174" font-size="27" font-weight="700" fill="${ink}">${active.length}<tspan font-size="12" fill="${quiet}"> days  ·  </tspan><tspan fill="#39d353">${peak}</tspan></text>
   </g>
   <text x="46" y="210" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">LIVE MEMORY / LAST 30 DAYS</text>
   ${bars}
@@ -146,8 +146,8 @@ function render(theme) {
   <path d="M46 261H954" stroke="${rule}"/>
   <text x="46" y="282" font-family="ui-monospace,monospace" font-size="10" letter-spacing="2" fill="${quiet}">CONTRIBUTION ADDRESS TABLE</text>
   ${cells}
-  <g font-family="ui-monospace,monospace" font-size="10" fill="${quiet}"><text x="763" y="310">less</text>${amberScale.map((color, i) => `<rect x="${800 + i * 20}" y="300" width="12" height="12" rx="2" fill="${color}"/>`).join("")}<text x="910" y="310">more</text></g>
-  <path class="scan" d="M0 286V386" stroke="#ffb000" stroke-width="2" opacity=".16"/>
+  <g font-family="ui-monospace,monospace" font-size="10" fill="${quiet}"><text x="763" y="310">less</text>${green.map((color, i) => `<rect x="${800 + i * 20}" y="300" width="12" height="12" rx="2" fill="${color}"/>`).join("")}<text x="910" y="310">more</text></g>
+  <path class="scan" d="M0 286V386" stroke="#39d353" stroke-width="2" opacity=".16"/>
   <text x="46" y="413" font-family="ui-monospace,monospace" font-size="11" fill="${quiet}">CLICK TO INITIALIZE MANUAL REPAIR  ·  touch / mouse / keyboard</text>
   <text x="954" y="413" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="#ffbd2e">[ ENTER ] DEBUG TIMELINE →</text>
 </svg>`;
