@@ -17,7 +17,7 @@ const state = {
 
 const monthName = new Intl.DateTimeFormat("en", { month: "short", year: "numeric", timeZone: "UTC" });
 const dayLabel = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
-const storageKey = "dumbly-smart:chrono-debug:v1";
+const storageKey = "dumbly-smart:timeline-debug:v2";
 const instantBoot = new URLSearchParams(location.search).has("instant");
 
 function hash(text) {
@@ -194,20 +194,23 @@ function buildRoute(month) {
   ui.puzzleHost.replaceChildren($("#route-template").content.cloneNode(true));
   const board = $(".route-board", ui.puzzleHost);
   const seed = hash(month.key);
-  // A guaranteed continuous snake: IN enters cell 0 from the left and OUT
-  // leaves cell 12 on the left. Elbows at row ends turn the signal downward.
+  // A guaranteed 5x5 continuous snake. IN enters the upper-left relay and
+  // OUT leaves the lower-right relay; row-end elbows move the signal down.
   const solution = [
-    ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 2],
-    ["elbow", 1], ["straight", 1], ["straight", 1], ["elbow", 3],
-    ["elbow", 0], ["straight", 1], ["straight", 1], ["elbow", 2],
-    ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 3],
+    ["straight", 1], ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 2],
+    ["elbow", 1], ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 3],
+    ["elbow", 0], ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 2],
+    ["elbow", 1], ["straight", 1], ["straight", 1], ["straight", 1], ["elbow", 3],
+    ["elbow", 0], ["straight", 1], ["straight", 1], ["straight", 1], ["straight", 1],
   ];
   solution.forEach(([shape, target], index) => {
     const tile = document.createElement("button");
     tile.type = "button"; tile.setAttribute("aria-label", `Rotate relay ${index + 1}`);
     tile.className = `route-tile ${shape}`;
     tile.dataset.target = target;
-    tile.dataset.rotation = (target + 1 + ((seed >>> (index % 16)) % 3)) % 4;
+    tile.dataset.rotation = shape === "straight"
+      ? 0
+      : (target + 1 + ((seed >>> (index % 16)) % 3)) % 4;
     tile.style.setProperty("--rotation", tile.dataset.rotation);
     tile.addEventListener("click", () => {
       tile.dataset.rotation = (Number(tile.dataset.rotation) + 1) % 4;
@@ -227,7 +230,7 @@ function buildMemory(month) {
   ui.puzzleHost.replaceChildren($("#memory-template").content.cloneNode(true));
   const board = $(".memory-board", ui.puzzleHost);
   const seed = hash(month.key);
-  const target = Array.from({ length: 16 }, (_, i) => ((seed >>> (i % 28)) + i + month.total) % 3 === 0);
+  const target = Array.from({ length: 25 }, (_, i) => ((seed >>> (i % 28)) + i + month.total) % 3 === 0);
   target.forEach((on, index) => {
     const byte = document.createElement("button");
     byte.type = "button"; byte.className = `memory-byte preview${on ? " on" : ""}`;
@@ -239,7 +242,7 @@ function buildMemory(month) {
     });
     board.append(byte);
   });
-  let remaining = 3;
+  let remaining = 2;
   const timer = setInterval(() => {
     if (!board.isConnected) { clearInterval(timer); return; }
     remaining -= 1;
@@ -253,14 +256,14 @@ function buildMemory(month) {
       const solved = $$(".memory-byte", board).every((byte) => byte.dataset.on === byte.dataset.target);
       solved ? completeRepair() : failPuzzle("CHECKSUM DOES NOT MATCH CAPTURED MEMORY");
     });
-  }, 850);
+  }, 800);
 }
 
 function buildLogs(month) {
   ui.puzzleHost.replaceChildren($("#logs-template").content.cloneNode(true));
   const board = $(".log-board", ui.puzzleHost); const sequence = $(".log-sequence", ui.puzzleHost);
-  const available = month.active.length >= 4 ? month.active : month.days.filter((_, i) => i % Math.max(1, Math.floor(month.days.length / 5)) === 0);
-  const records = shuffled(available, hash(month.key)).slice(0, 4).sort((a, b) => a.date.localeCompare(b.date));
+  const available = month.active.length >= 6 ? month.active : month.days.filter((_, i) => i % Math.max(1, Math.floor(month.days.length / 7)) === 0);
+  const records = shuffled(available, hash(month.key)).slice(0, 6).sort((a, b) => a.date.localeCompare(b.date));
   const selected = [];
   shuffled(records, hash(month.key + "logs")).forEach((record) => {
     const button = document.createElement("button");
@@ -280,8 +283,8 @@ function failPuzzle(message) {
   state.attempts += 1; ui.attempt.textContent = `ATTEMPT ${state.attempts}`;
   ui.puzzleHost.classList.add("shake"); setTimeout(() => ui.puzzleHost.classList.remove("shake"), 500);
   log(message); beep(120, .12);
-  if (state.attempts >= 3) ui.hint.classList.remove("hidden");
-  if (state.attempts >= 5) ui.bypass.classList.remove("hidden");
+  if (state.attempts >= 4) ui.hint.classList.remove("hidden");
+  if (state.attempts >= 7) ui.bypass.classList.remove("hidden");
 }
 
 function showHint() {

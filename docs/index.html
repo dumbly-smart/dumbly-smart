@@ -95,7 +95,7 @@
     <template id="route-template">
       <div class="puzzle-copy">
         <p>FAULT 0x17: SIGNAL PATH INTERRUPTED</p>
-        <p class="muted">Rotate every relay until one continuous route connects IN to OUT.</p>
+        <p class="muted">Rotate all 25 relays until one continuous route connects IN to OUT.</p>
       </div>
       <div class="route-board" data-puzzle="route"></div>
       <button class="primary verify-button" type="button">RUN SIGNAL TEST</button>
@@ -104,17 +104,17 @@
     <template id="memory-template">
       <div class="puzzle-copy">
         <p>FAULT 0x2A: MEMORY CHECKSUM MISMATCH</p>
-        <p class="muted">Memorize the lit bytes, then restore the same pattern.</p>
+        <p class="muted">Memorize the 25-byte page, then restore the same bit pattern.</p>
       </div>
       <div class="memory-board" data-puzzle="memory"></div>
-      <div class="memory-countdown">CAPTURE IN <span>3</span></div>
+      <div class="memory-countdown">CAPTURE IN <span>2</span></div>
       <button class="primary verify-button hidden" type="button">VERIFY CHECKSUM</button>
     </template>
 
     <template id="logs-template">
       <div class="puzzle-copy">
         <p>FAULT 0x3C: LOG INDEX CORRUPTED</p>
-        <p class="muted">Select the records from oldest to newest. Contribution counts are real.</p>
+        <p class="muted">Rebuild six records from oldest to newest. Contribution counts are real.</p>
       </div>
       <div class="log-board" data-puzzle="logs"></div>
       <div class="log-sequence" aria-live="polite"></div>
