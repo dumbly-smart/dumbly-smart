@@ -36,7 +36,7 @@
 <summary>How the timeline was compiled</summary>
 <br>
 
-The **13 calendar sectors** are generated from **272 public commits** across **34 active days**. Each month selects a deterministic signal-routing, memory, or log-recovery puzzle. The activity cells contain the real daily counts; no private commit data is exposed.
+The **13 calendar sectors** are generated from **276 public commits** across **34 active days**. Each month selects a deterministic signal-routing, memory, or log-recovery puzzle. The activity cells contain the real daily counts; no private commit data is exposed.
 
 [Play the debugger](https://dumbly-smart.github.io/dumbly-smart/) · [Raw data](./generated/activity.json) · [Generator](./scripts/render-commits.mjs)
 
