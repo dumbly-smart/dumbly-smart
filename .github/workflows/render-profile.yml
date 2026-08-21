@@ -1,4 +1,4 @@
-name: Render commit page
+name: Daily Thirukural
 
 on:
   workflow_dispatch:
@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - "scripts/**"
+      - "data/**"
       - ".github/workflows/render-profile.yml"
 
 permissions:
@@ -26,15 +27,12 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - name: Compile activity into SVG
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PROFILE_LOGIN: dumbly-smart
-        run: node scripts/render-commits.mjs
+      - name: Render today's Thirukural
+        run: node scripts/render-thirukural.mjs
       - name: Commit changed artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add generated/ docs/activity.json README.md
-          git diff --cached --quiet || git commit -m "chore: render debug timeline"
+          git add generated/ README.md
+          git diff --cached --quiet || git commit -m "chore: update daily Thirukural"
           git push

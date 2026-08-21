@@ -1,7 +1,5 @@
-<a href="https://dumbly-smart.github.io/dumbly-smart/?v=mono-3">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/debugger-dark.svg?v=20260820191315">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/debugger-light.svg?v=20260820191315">
-  <img width="100%" alt="Open my Bash timeline debugger, generated from GitHub activity" src="./generated/debugger-light.svg?v=20260820191315">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-08-21">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-08-21">
+  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-08-21">
 </picture>
-</a>
