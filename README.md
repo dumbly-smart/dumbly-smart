@@ -1,5 +1,5 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-09-01">
-  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-09-01">
-  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-09-01">
+  <source media="(prefers-color-scheme: dark)" srcset="./generated/thirukural-dark.svg?v=2026-09-02">
+  <source media="(prefers-color-scheme: light)" srcset="./generated/thirukural-light.svg?v=2026-09-02">
+  <img width="100%" alt="Thirukural of the day in Tamil and English" src="./generated/thirukural-light.svg?v=2026-09-02">
 </picture>
