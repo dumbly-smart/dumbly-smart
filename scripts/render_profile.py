@@ -214,6 +214,36 @@ def _stage_avatar(source, destination):
     shutil.copyfile(source, destination)
 
 
+def _promote_outputs(staged_outputs):
+    """Replace outputs together, restoring prior files if promotion fails."""
+    promoted = []
+    try:
+        for staged, destination in staged_outputs.items():
+            backup = None
+            if destination.exists():
+                with tempfile.NamedTemporaryFile(
+                    dir=destination.parent,
+                    prefix=f".{destination.name}.backup-",
+                    delete=False,
+                ) as temporary:
+                    backup = Path(temporary.name)
+                backup.unlink()
+                os.replace(destination, backup)
+            promoted.append((destination, backup))
+            os.replace(staged, destination)
+    except Exception:
+        for destination, backup in reversed(promoted):
+            if destination.exists():
+                destination.unlink()
+            if backup is not None and backup.exists():
+                os.replace(backup, destination)
+        raise
+    else:
+        for _, backup in promoted:
+            if backup is not None and backup.exists():
+                backup.unlink()
+
+
 def generate_profile(
     date_override=None,
     fetch_network=True,
@@ -252,7 +282,7 @@ def generate_profile(
                     contributions_source, stage_data / "contributions.json"
                 )
         else:
-            offline_avatar = avatar_source or root / "tests" / "fixtures" / "avatar.ppm"
+            offline_avatar = avatar_source or root / "tests" / "fixtures" / "avatar.png"
             _stage_avatar(offline_avatar, stage_avatar)
             offline_data = contributions_source or (root / "data" / "contributions.json")
             contribution_data = _load_contributions(
@@ -280,9 +310,9 @@ def generate_profile(
         )
         (stage / "README.md").write_text(readme, encoding="utf-8")
 
-        for staged, destination in staged_outputs.items():
+        for _, destination in staged_outputs.items():
             destination.parent.mkdir(parents=True, exist_ok=True)
-            os.replace(staged, destination)
+        _promote_outputs(staged_outputs)
 
     return {
         "ascii": generated_dir / "ascii.svg",
