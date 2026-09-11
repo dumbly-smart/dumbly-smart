@@ -169,9 +169,29 @@ def render_info_card(kural, username, highlights=None, day=None):
     ]
     y = 160
     for index, line in enumerate(tamil_lines):
-        output.append(f'<g class="line" style="animation-delay:{320 + index * 60}ms">' + _svg_text(line, 24, y, class_name="kural") + "</g>")
+        delay = 320 + index * 60
+        duration = max(1.2, len(line) * 0.045)
+        clip_id = f"kural-tamil-{index}"
+        output.append(
+            f'<clipPath id="{clip_id}"><rect x="0" y="{y - 18}" width="0" height="24">'
+            f'<animate attributeName="width" from="0" to="720" dur="{duration:.2f}s" '
+            f'begin="{delay}ms" fill="freeze"/></rect></clipPath>'
+            f'<g class="line" style="animation-delay:{delay}ms" clip-path="url(#{clip_id})">'
+            + _svg_text(line, 24, y, class_name="kural")
+            + "</g>"
+        )
         y += 22
-    output.append(f'<g class="line" style="animation-delay:{320 + len(tamil_lines) * 60}ms">' + _svg_text(english, 24, y + 8, class_name="english") + "</g>")
+    english_delay = 320 + len(tamil_lines) * 60
+    english_clip_id = "kural-english"
+    english_duration = max(1.2, len(english) * 0.025)
+    output.append(
+        f'<clipPath id="{english_clip_id}"><rect x="0" y="{y - 10}" width="0" height="24">'
+        f'<animate attributeName="width" from="0" to="720" dur="{english_duration:.2f}s" '
+        f'begin="{english_delay}ms" fill="freeze"/></rect></clipPath>'
+        f'<g class="line" style="animation-delay:{english_delay}ms" clip-path="url(#{english_clip_id})">'
+        + _svg_text(english, 24, y + 8, class_name="english")
+        + "</g>"
+    )
     output.append("</svg>")
     return "".join(output)
 

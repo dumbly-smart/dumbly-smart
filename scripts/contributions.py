@@ -91,6 +91,18 @@ def parse_contribution_html(html: str) -> dict:
     }
 
 
+def validate_year_calendar(data: dict) -> None:
+    """Require the fetched contribution calendar to cover a complete year."""
+    days = data.get("days", [])
+    if len(days) not in range(365, 372):
+        raise ValueError(
+            f"expected a full-year contribution calendar with 365-371 days, found {len(days)}"
+        )
+    dates = [date.fromisoformat(day["date"]) for day in days]
+    if dates[-1] - dates[0] != timedelta(days=len(days) - 1):
+        raise ValueError("contribution calendar does not span a complete year")
+
+
 def fetch_contributions(username: str, destination) -> dict:
     """Fetch, parse, and then persist a public GitHub contribution page."""
     response = requests.get(
@@ -99,6 +111,7 @@ def fetch_contributions(username: str, destination) -> dict:
     )
     response.raise_for_status()
     data = parse_contribution_html(response.text)
+    validate_year_calendar(data)
 
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)

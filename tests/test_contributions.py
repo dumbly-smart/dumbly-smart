@@ -1,4 +1,5 @@
 import json
+from datetime import date, timedelta
 from pathlib import Path
 from xml.etree import ElementTree
 
@@ -8,6 +9,7 @@ from scripts.contributions import (
     fetch_contributions,
     parse_contribution_html,
     render_heatmap_svg,
+    validate_year_calendar,
 )
 
 
@@ -19,6 +21,13 @@ def _cells(*dates):
         f'<rect data-date="{day}" data-level="1" aria-label="1 contribution"/>'
         for day in dates
     )
+
+
+def _full_year_fixture():
+    start = date(2025, 9, 7)
+    return "<main>" + _cells(
+        *(start + timedelta(days=index) for index in range(365))
+    ) + "</main>"
 
 
 def test_parse_contribution_fixture_and_derive_stats():
@@ -83,7 +92,7 @@ def test_day_positions_use_sunday_based_rows():
 
 def test_fetch_contributions_parses_before_writing(tmp_path, monkeypatch):
     destination = tmp_path / "contributions.json"
-    fixture_html = FIXTURE.read_text(encoding="utf-8")
+    fixture_html = _full_year_fixture()
 
     class Response:
         text = fixture_html
@@ -100,6 +109,7 @@ def test_fetch_contributions_parses_before_writing(tmp_path, monkeypatch):
     result = fetch_contributions("dumbly-smart", destination)
 
     assert json.loads(destination.read_text(encoding="utf-8")) == result
+    assert len(result["days"]) == 365
 
 
 def test_fetch_contributions_does_not_write_when_parse_fails(tmp_path, monkeypatch):
@@ -123,12 +133,26 @@ def test_fetch_contributions_does_not_write_when_parse_fails(tmp_path, monkeypat
     assert destination.read_text(encoding="utf-8") == "previous"
 
 
+def test_validate_year_calendar_requires_a_full_rolling_year():
+    days = [
+        {"date": f"2026-01-{index:02d}", "count": 0, "level": 0}
+        for index in range(1, 11)
+    ]
+
+    try:
+        validate_year_calendar({"days": days})
+    except ValueError as error:
+        assert "365" in str(error) or "366" in str(error)
+    else:
+        raise AssertionError("expected full-year validation")
+
+
 def test_fetch_contributions_keeps_existing_file_when_atomic_replace_fails(
     tmp_path, monkeypatch
 ):
     destination = tmp_path / "contributions.json"
     destination.write_text("previous", encoding="utf-8")
-    fixture_html = FIXTURE.read_text(encoding="utf-8")
+    fixture_html = _full_year_fixture()
 
     class Response:
         text = fixture_html

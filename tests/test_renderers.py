@@ -41,6 +41,18 @@ def test_info_card_accepts_explicit_day():
     assert "2024-01-02" in svg
 
 
+def test_info_card_types_the_kural_lines_like_a_cli():
+    svg = render_info_card(
+        {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
+        username="dumbly-smart",
+        day=date(2024, 1, 2),
+    )
+
+    assert 'clipPath id="kural-' in svg
+    assert 'attributeName="width"' in svg
+    assert 'fill="freeze"' in svg
+
+
 def test_xml_text_is_escaped():
     svg = render_info_card(
         {"number": 1, "tamil": ["<&"], "english": '"quoted"'},

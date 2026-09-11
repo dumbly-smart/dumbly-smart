@@ -57,10 +57,10 @@ def test_offline_date_generation_uses_local_sources(tmp_path):
 
 def test_checked_in_info_card_matches_current_renderer():
     expected = render_info_card(
-        select_daily_kural(date(2026, 9, 11), KURALS_PATH),
+        select_daily_kural(date(2026, 9, 12), KURALS_PATH),
         "dumbly-smart",
         highlights=PROJECT_HIGHLIGHTS,
-        day=date(2026, 9, 11),
+        day=date(2026, 9, 12),
     )
 
     assert Path("generated/info-card.svg").read_text(encoding="utf-8") == expected
