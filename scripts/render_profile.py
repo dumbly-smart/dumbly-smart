@@ -4,14 +4,15 @@ from __future__ import annotations
 
 import os
 import tempfile
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 import requests
 from PIL import Image, ImageOps
 
-from .config import AVATAR_URL, xml_escape
+from .config import AVATAR_URL, TIMEZONE, xml_escape
 
 
 TIMEOUT_SECONDS = 20
@@ -53,9 +54,15 @@ def avatar_to_grid(path, columns=92, rows=48):
 
     with Image.open(path) as source:
         image = ImageOps.exif_transpose(source).convert("L")
-        # Terminal glyphs are roughly twice as tall as they are wide. Resize at
-        # twice the output height, then average each pair of character cells.
-        image = image.resize((columns, rows * 2), Image.Resampling.LANCZOS)
+        # Terminal glyphs are roughly twice as tall as they are wide. Fit into
+        # the character-cell aspect ratio, cropping excess edges rather than
+        # stretching non-square avatars, then average each vertical pair.
+        image = ImageOps.fit(
+            image,
+            (columns, rows * 2),
+            method=Image.Resampling.LANCZOS,
+            centering=(0.5, 0.5),
+        )
         pixels = image.load()
         return [
             [round((pixels[column, row * 2] + pixels[column, row * 2 + 1]) / 2)
@@ -109,12 +116,25 @@ def _as_lines(value) -> list[str]:
     return [str(line) for line in value]
 
 
-def render_info_card(kural, username, highlights=None):
+def _resolve_day(day):
+    if day is None:
+        return datetime.now(ZoneInfo(TIMEZONE)).date()
+    if isinstance(day, datetime):
+        if day.tzinfo is not None:
+            return day.astimezone(ZoneInfo(TIMEZONE)).date()
+        return day.date()
+    if isinstance(day, date):
+        return day
+    raise TypeError("day must be a date, datetime, or None")
+
+
+def render_info_card(kural, username, highlights=None, day=None):
     """Render the user/date/Kural terminal card with escaped content."""
     highlights = list(highlights or [])
     tamil_lines = _as_lines(kural.get("tamil", []))
     english = str(kural.get("english", ""))
     number = kural.get("number", "")
+    display_day = _resolve_day(day)
     height = 220 + max(0, len(tamil_lines) - 2) * 22
     output = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 {height}" role="img" aria-label="Profile information and Kural {xml_escape(number)}">',
@@ -125,7 +145,7 @@ def render_info_card(kural, username, highlights=None):
         '<circle class="dot" cx="18" cy="15" r="5"/><circle fill="#d29922" cx="36" cy="15" r="5"/><circle fill="#f85149" cx="54" cy="15" r="5"/>',
         _svg_text("daily-profile", 72, 20, class_name="label"),
         '<g class="line" style="animation-delay:80ms">' + _svg_text("user", 24, 58, class_name="label") + _svg_text(f"{username}@github", 150, 58, class_name="value") + "</g>",
-        '<g class="line" style="animation-delay:140ms">' + _svg_text("date", 24, 82, class_name="label") + _svg_text(date.today().isoformat(), 150, 82, class_name="value") + "</g>",
+        '<g class="line" style="animation-delay:140ms">' + _svg_text("date", 24, 82, class_name="label") + _svg_text(display_day.isoformat(), 150, 82, class_name="value") + "</g>",
         '<g class="line" style="animation-delay:200ms">' + _svg_text("kural", 24, 106, class_name="label") + _svg_text(str(number), 150, 106, class_name="value") + "</g>",
         '<g class="line" style="animation-delay:260ms">' + _svg_text("focus", 24, 130, class_name="label") + _svg_text(", ".join(highlights) if highlights else "clarity · consistency · curiosity", 150, 130, class_name="value") + "</g>",
     ]

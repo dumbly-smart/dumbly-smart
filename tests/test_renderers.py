@@ -1,3 +1,4 @@
+from datetime import date
 from pathlib import Path
 
 from PIL import Image
@@ -30,6 +31,16 @@ def test_info_card_contains_username_and_kural_but_not_old_name_prompt():
     assert "avi@github" not in svg
 
 
+def test_info_card_accepts_explicit_day():
+    svg = render_info_card(
+        {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
+        username="dumbly-smart",
+        day=date(2024, 1, 2),
+    )
+
+    assert "2024-01-02" in svg
+
+
 def test_xml_text_is_escaped():
     svg = render_info_card(
         {"number": 1, "tamil": ["<&"], "english": '"quoted"'},
@@ -49,6 +60,20 @@ def test_avatar_to_grid_uses_requested_dimensions(tmp_path):
     assert len(grid) == 3
     assert all(len(row) == 4 for row in grid)
     assert all(0 <= value <= 255 for row in grid for value in row)
+
+
+def test_avatar_to_grid_crops_rectangular_images_without_stretching(tmp_path):
+    image_path = tmp_path / "wide-avatar.png"
+    image = Image.new("L", (8, 2), color=255)
+    image.putpixel((0, 0), 0)
+    image.putpixel((0, 1), 0)
+    image.putpixel((7, 0), 0)
+    image.putpixel((7, 1), 0)
+    image.save(image_path)
+
+    grid = avatar_to_grid(image_path, columns=4, rows=2)
+
+    assert min(value for row in grid for value in row) > 100
 
 
 def test_download_avatar_replaces_destination_atomically(tmp_path):
