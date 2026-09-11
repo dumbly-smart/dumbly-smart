@@ -3,16 +3,29 @@ from datetime import date
 from scripts.render_profile import render_info_card
 
 
-def test_info_card_contains_username_and_kural_but_not_old_name_prompt():
+def test_info_card_contains_typed_kural_but_not_old_name_prompt():
     svg = render_info_card(
         {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
         username="dumbly-smart",
     )
 
-    assert "dumbly-smart@github" in svg
-    assert "42" in svg
+    assert "ஒரு குறள்" in svg
     assert "A Kural" in svg
     assert "avi@github" not in svg
+
+
+def test_info_card_has_no_mac_window_or_metadata_rows():
+    svg = render_info_card(
+        {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
+        username="dumbly-smart",
+    )
+
+    assert 'class="bar"' not in svg
+    assert "<circle" not in svg
+    assert "daily-profile" not in svg
+    assert ">user<" not in svg
+    assert ">date<" not in svg
+    assert ">kural<" not in svg
 
 
 def test_info_card_omits_focus_row_and_uses_large_kural_type():
@@ -26,21 +39,10 @@ def test_info_card_omits_focus_row_and_uses_large_kural_type():
     assert ".english{fill:#c9d1d9;font:16px" in svg
 
 
-def test_info_card_accepts_explicit_day():
-    svg = render_info_card(
-        {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
-        username="dumbly-smart",
-        day=date(2024, 1, 2),
-    )
-
-    assert "2024-01-02" in svg
-
-
 def test_info_card_types_the_kural_lines_like_a_cli():
     svg = render_info_card(
         {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
         username="dumbly-smart",
-        day=date(2024, 1, 2),
     )
 
     assert 'clipPath id="kural-' in svg

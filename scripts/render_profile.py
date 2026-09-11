@@ -49,44 +49,35 @@ def _resolve_day(day):
     raise TypeError("day must be a date, datetime, or None")
 
 
-def render_info_card(kural, username, day=None):
+def render_info_card(kural, username):
     """Render the user/date/Kural terminal card with escaped content."""
     tamil_lines = _as_lines(kural.get("tamil", []))
     english = str(kural.get("english", ""))
-    number = kural.get("number", "")
-    display_day = _resolve_day(day)
-    height = 220 + max(0, len(tamil_lines) - 2) * 22
+    height = 110 + max(0, len(tamil_lines) - 2) * 30
     output = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 {height}" role="img" aria-label="Profile information and Kural {xml_escape(number)}">',
-        f'<title>{xml_escape(username)}@github daily Thirukkural</title>',
-        "<style>.bg{fill:#0d1117}.bar{fill:#161b22}.label{fill:#8b949e;font:13px monospace}.value{fill:#c9d1d9;font:14px monospace}.kural{fill:#79c0ff;font:22px sans-serif}.english{fill:#c9d1d9;font:16px sans-serif}.dot{fill:#3fb950}.line{animation:rise .7s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>",
-        f'<rect class="bg" width="760" height="{height}" rx="9"/>',
-        '<rect class="bar" width="760" height="30" rx="9"/>',
-        '<circle class="dot" cx="18" cy="15" r="5"/><circle fill="#d29922" cx="36" cy="15" r="5"/><circle fill="#f85149" cx="54" cy="15" r="5"/>',
-        _svg_text("daily-profile", 72, 20, class_name="label"),
-        '<g class="line" style="animation-delay:80ms">' + _svg_text("user", 24, 58, class_name="label") + _svg_text(f"{username}@github", 150, 58, class_name="value") + "</g>",
-        '<g class="line" style="animation-delay:140ms">' + _svg_text("date", 24, 82, class_name="label") + _svg_text(display_day.isoformat(), 150, 82, class_name="value") + "</g>",
-        '<g class="line" style="animation-delay:200ms">' + _svg_text("kural", 24, 106, class_name="label") + _svg_text(str(number), 150, 106, class_name="value") + "</g>",
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 {height}" role="img" aria-label="Daily Thirukkural">',
+        "<title>Daily Thirukkural</title>",
+        "<style>.kural{fill:#79c0ff;font:22px sans-serif}.english{fill:#c9d1d9;font:16px sans-serif}.line{animation:rise .7s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>",
     ]
-    y = 142
+    y = 36
     for index, line in enumerate(tamil_lines):
-        delay = 320 + index * 60
+        delay = 80 + index * 60
         duration = max(1.2, len(line) * 0.045)
         clip_id = f"kural-tamil-{index}"
         output.append(
-            f'<clipPath id="{clip_id}"><rect x="0" y="{y - 18}" width="0" height="24">'
+            f'<clipPath id="{clip_id}"><rect x="0" y="{y - 18}" width="0" height="28">'
             f'<animate attributeName="width" from="0" to="720" dur="{duration:.2f}s" '
             f'begin="{delay}ms" fill="freeze"/></rect></clipPath>'
             f'<g class="line" style="animation-delay:{delay}ms" clip-path="url(#{clip_id})">'
             + _svg_text(line, 24, y, class_name="kural")
             + "</g>"
         )
-        y += 22
-    english_delay = 320 + len(tamil_lines) * 60
+        y += 30
+    english_delay = 80 + len(tamil_lines) * 60
     english_clip_id = "kural-english"
     english_duration = max(1.2, len(english) * 0.025)
     output.append(
-        f'<clipPath id="{english_clip_id}"><rect x="0" y="{y - 10}" width="0" height="24">'
+        f'<clipPath id="{english_clip_id}"><rect x="0" y="{y - 10}" width="0" height="28">'
         f'<animate attributeName="width" from="0" to="720" dur="{english_duration:.2f}s" '
         f'begin="{english_delay}ms" fill="freeze"/></rect></clipPath>'
         f'<g class="line" style="animation-delay:{english_delay}ms" clip-path="url(#{english_clip_id})">'
@@ -189,9 +180,7 @@ def generate_profile(
                 offline_data, stage_data / "contributions.json"
             )
 
-        info_svg = render_info_card(
-            kural, USERNAME, day=day
-        )
+        info_svg = render_info_card(kural, USERNAME)
         heatmap_svg = render_heatmap_svg(contribution_data, USERNAME)
         readme = README_TEMPLATE.format(username=USERNAME)
 

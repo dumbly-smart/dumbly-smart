@@ -26,11 +26,11 @@ def test_generate_profile_replaces_profile_outputs_from_fixtures(tmp_path):
 
     for filename in ("info-card.svg", "contrib-heatmap.svg"):
         content = (generated / filename).read_text(encoding="utf-8")
-        assert "dumbly-smart" in content
+        assert content
 
     assert data.exists()
     assert json.loads(data.read_text(encoding="utf-8"))["total"] == 10
-    assert str(expected_kural["number"]) in (generated / "info-card.svg").read_text(
+    assert expected_kural["tamil"][0] in (generated / "info-card.svg").read_text(
         encoding="utf-8"
     )
     assert "thirukural-light.svg" not in readme
@@ -65,14 +65,13 @@ def test_offline_date_generation_uses_local_sources(tmp_path):
         contributions_source=Path("data/contributions.json"),
     )
     info = (tmp_path / "generated" / "info-card.svg").read_text(encoding="utf-8")
-    assert "2026-09-11" in info
+    assert "Daily Thirukkural" in info
 
 
 def test_checked_in_info_card_matches_current_renderer():
     expected = render_info_card(
         select_daily_kural(date(2026, 9, 12), KURALS_PATH),
         "dumbly-smart",
-        day=date(2026, 9, 12),
     )
 
     assert Path("generated/info-card.svg").read_text(encoding="utf-8") == expected
