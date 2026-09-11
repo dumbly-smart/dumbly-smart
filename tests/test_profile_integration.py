@@ -5,7 +5,7 @@ from pathlib import Path
 import scripts.render_profile as render_profile
 from scripts.config import KURALS_PATH
 from scripts.profile_data import select_daily_kural
-from scripts.render_profile import PROJECT_HIGHLIGHTS, generate_profile, render_info_card
+from scripts.render_profile import generate_profile, render_info_card
 
 
 FIXTURE_DIR = Path("tests/fixtures")
@@ -37,8 +37,9 @@ def test_generate_profile_replaces_profile_outputs_from_fixtures(tmp_path):
     assert "thirukural-dark.svg" not in readme
     assert "avi@github" not in readme
     assert "dumbly-smart@github" in readme
-    assert "https://github.com/dumbly-smart" in readme
     assert "generated/ascii.svg" not in readme
+    assert "This profile is generated from public GitHub activity" not in readme
+    assert "See the source and public work on" not in readme
 
 
 def test_profile_has_no_avatar_panel(tmp_path):
@@ -71,7 +72,6 @@ def test_checked_in_info_card_matches_current_renderer():
     expected = render_info_card(
         select_daily_kural(date(2026, 9, 12), KURALS_PATH),
         "dumbly-smart",
-        highlights=PROJECT_HIGHLIGHTS,
         day=date(2026, 9, 12),
     )
 

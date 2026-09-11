@@ -49,9 +49,8 @@ def _resolve_day(day):
     raise TypeError("day must be a date, datetime, or None")
 
 
-def render_info_card(kural, username, highlights=None, day=None):
+def render_info_card(kural, username, day=None):
     """Render the user/date/Kural terminal card with escaped content."""
-    highlights = list(highlights or [])
     tamil_lines = _as_lines(kural.get("tamil", []))
     english = str(kural.get("english", ""))
     number = kural.get("number", "")
@@ -98,7 +97,6 @@ def render_info_card(kural, username, highlights=None, day=None):
     return "".join(output)
 
 
-PROJECT_HIGHLIGHTS = ["Python", "SVG", "GitHub automation"]
 README_TEMPLATE = """<div align="center">
 <h3><code>{username}@github ~ $ ./contributions.sh</code></h3>
 <img src="./generated/contrib-heatmap.svg" width="860" alt="GitHub contribution heatmap" />
@@ -106,9 +104,6 @@ README_TEMPLATE = """<div align="center">
 <h3><code>{username}@github ~ $ ./kural --today</code></h3>
 <img src="./generated/info-card.svg" width="760" alt="Daily Thirukkural terminal card" />
 </div>
-
-This profile is generated from public GitHub activity and a daily Thirukkural.
-See the source and public work on [GitHub](https://github.com/{username}).
 """
 
 
@@ -195,7 +190,7 @@ def generate_profile(
             )
 
         info_svg = render_info_card(
-            kural, USERNAME, highlights=PROJECT_HIGHLIGHTS, day=day
+            kural, USERNAME, day=day
         )
         heatmap_svg = render_heatmap_svg(contribution_data, USERNAME)
         readme = README_TEMPLATE.format(username=USERNAME)
