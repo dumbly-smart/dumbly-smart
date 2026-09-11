@@ -168,3 +168,10 @@ def test_heatmap_svg_has_grid_metadata_legend_footer_and_animation():
     assert "animation" in svg
     assert svg.count("class=\"day\"") == 53 * 7
     ElementTree.fromstring(svg)
+
+
+def test_checked_in_heatmap_matches_current_renderer():
+    data = json.loads(Path("data/contributions.json").read_text(encoding="utf-8"))
+    expected = render_heatmap_svg(data, "dumbly-smart")
+
+    assert Path("generated/contrib-heatmap.svg").read_text(encoding="utf-8") == expected
