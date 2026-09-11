@@ -4,6 +4,7 @@ from xml.etree import ElementTree
 
 import scripts.contributions as contributions
 from scripts.contributions import (
+    _day_positions,
     fetch_contributions,
     parse_contribution_html,
     render_heatmap_svg,
@@ -11,6 +12,13 @@ from scripts.contributions import (
 
 
 FIXTURE = Path("tests/fixtures/contributions.html")
+
+
+def _cells(*dates):
+    return "".join(
+        f'<rect data-date="{day}" data-level="1" aria-label="1 contribution"/>'
+        for day in dates
+    )
 
 
 def test_parse_contribution_fixture_and_derive_stats():
@@ -33,6 +41,44 @@ def test_parse_contribution_fixture_is_stable_json():
     serialized = json.dumps(result, ensure_ascii=False, sort_keys=True)
     assert json.loads(serialized) == result
     assert serialized.index('"days"') < serialized.index('"total"')
+
+
+def test_parse_contribution_rejects_duplicate_dates():
+    html = f"<main>{_cells('2026-09-01', '2026-09-01')}</main>"
+
+    try:
+        parse_contribution_html(html)
+    except ValueError as error:
+        assert "duplicate contribution date" in str(error)
+    else:
+        raise AssertionError("expected duplicate-date validation")
+
+
+def test_parse_contribution_rejects_sparse_dates():
+    html = f"<main>{_cells('2026-09-01', '2026-09-03')}</main>"
+
+    try:
+        parse_contribution_html(html)
+    except ValueError as error:
+        assert "non-contiguous contribution dates" in str(error)
+    else:
+        raise AssertionError("expected contiguous-date validation")
+
+
+def test_day_positions_use_sunday_based_rows():
+    days = [
+        {"date": "2026-09-06"},
+        {"date": "2026-09-07"},
+        {"date": "2026-09-12"},
+        {"date": "2026-09-13"},
+    ]
+
+    assert _day_positions(days) == {
+        "2026-09-06": (0, 0),
+        "2026-09-07": (0, 1),
+        "2026-09-12": (0, 6),
+        "2026-09-13": (1, 0),
+    }
 
 
 def test_fetch_contributions_parses_before_writing(tmp_path, monkeypatch):
@@ -75,6 +121,38 @@ def test_fetch_contributions_does_not_write_when_parse_fails(tmp_path, monkeypat
     else:
         raise AssertionError("expected parse failure")
     assert destination.read_text(encoding="utf-8") == "previous"
+
+
+def test_fetch_contributions_keeps_existing_file_when_atomic_replace_fails(
+    tmp_path, monkeypatch
+):
+    destination = tmp_path / "contributions.json"
+    destination.write_text("previous", encoding="utf-8")
+    fixture_html = FIXTURE.read_text(encoding="utf-8")
+
+    class Response:
+        text = fixture_html
+
+        def raise_for_status(self):
+            return None
+
+    monkeypatch.setattr(contributions.requests, "get", lambda url, timeout: Response())
+
+    def fail_replace(source, target):
+        assert Path(source).parent == destination.parent
+        assert Path(target) == destination
+        raise OSError("simulated replacement failure")
+
+    monkeypatch.setattr(contributions.os, "replace", fail_replace)
+
+    try:
+        fetch_contributions("dumbly-smart", destination)
+    except OSError as error:
+        assert "simulated replacement failure" in str(error)
+    else:
+        raise AssertionError("expected atomic replacement failure")
+    assert destination.read_text(encoding="utf-8") == "previous"
+    assert not list(destination.parent.glob(f".{destination.name}.*"))
 
 
 def test_heatmap_svg_has_grid_metadata_legend_footer_and_animation():

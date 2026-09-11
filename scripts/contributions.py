@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import json
+import os
 import re
+import tempfile
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 
@@ -67,6 +69,12 @@ def parse_contribution_html(html: str) -> dict:
     days.sort(key=lambda item: item["date"])
     if not days:
         raise ValueError("no contribution cells found")
+    dates = [date.fromisoformat(day["date"]) for day in days]
+    if len(set(dates)) != len(dates):
+        raise ValueError("duplicate contribution date")
+    for previous, current in zip(dates, dates[1:]):
+        if current != previous + timedelta(days=1):
+            raise ValueError("non-contiguous contribution dates")
 
     current_streak, longest_streak = _streaks(days)
     monthly_totals = defaultdict(int)
@@ -94,9 +102,24 @@ def fetch_contributions(username: str, destination) -> dict:
 
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    temporary_name = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=destination.parent,
+            prefix=f".{destination.name}.",
+            delete=False,
+        ) as temporary:
+            temporary_name = temporary.name
+            json.dump(data, temporary, ensure_ascii=False, indent=2)
+            temporary.write("\n")
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        os.replace(temporary_name, destination)
+    finally:
+        if temporary_name and os.path.exists(temporary_name):
+            os.unlink(temporary_name)
     return data
 
 
@@ -107,7 +130,7 @@ def _day_positions(days: list[dict]) -> dict[str, tuple[int, int]]:
     for day in days:
         current = date.fromisoformat(day["date"])
         offset = current.toordinal() - start
-        positions[day["date"]] = (offset // 7, (offset + 1) % 7)
+        positions[day["date"]] = (offset // 7, offset % 7)
     return positions
 
 
