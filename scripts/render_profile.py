@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import json
 import tempfile
 from argparse import ArgumentParser
 from datetime import date, datetime
@@ -15,11 +14,6 @@ from .config import (
     TIMEZONE,
     USERNAME,
     xml_escape,
-)
-from .contributions import (
-    fetch_contributions,
-    parse_contribution_html,
-    render_heatmap_svg,
 )
 from .profile_data import select_daily_kural
 
@@ -89,29 +83,10 @@ def render_info_card(kural, username):
 
 
 README_TEMPLATE = """<div align="center">
-<h3><code>{username}@github ~ $ ./contributions.sh</code></h3>
-<img src="./generated/contrib-heatmap.svg" width="860" alt="GitHub contribution heatmap" />
-<br><br>
 <h3><code>{username}@github ~ $ ./kural --today</code></h3>
 <img src="./generated/info-card.svg" width="760" alt="Daily Thirukkural terminal card" />
 </div>
 """
-
-
-def _write_json(path, data):
-    path.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-
-
-def _load_contributions(source, destination):
-    source = Path(source)
-    if source.suffix.lower() in {".html", ".htm"}:
-        data = parse_contribution_html(source.read_text(encoding="utf-8"))
-    else:
-        data = json.loads(source.read_text(encoding="utf-8"))
-    _write_json(destination, data)
-    return data
 
 
 def _promote_outputs(staged_outputs):
@@ -146,15 +121,12 @@ def _promote_outputs(staged_outputs):
 
 def generate_profile(
     date_override=None,
-    fetch_network=True,
     output_dir=None,
-    contributions_source=None,
 ):
     """Generate the complete animated profile into the repository outputs."""
     root = Path(output_dir) if output_dir is not None else Path(__file__).resolve().parent.parent
     root.mkdir(parents=True, exist_ok=True)
     generated_dir = root / "generated"
-    data_dir = root / "data"
     readme_path = root / "README.md"
     day = _resolve_day(date_override)
     kural = select_daily_kural(day, KURALS_PATH)
@@ -162,38 +134,16 @@ def generate_profile(
     with tempfile.TemporaryDirectory(dir=root, prefix=".profile-build-") as temporary:
         stage = Path(temporary)
         stage_generated = stage / "generated"
-        stage_data = stage / "data"
         stage_generated.mkdir()
-        stage_data.mkdir()
-        if fetch_network:
-            if contributions_source is None:
-                contribution_data = fetch_contributions(
-                    USERNAME, stage_data / "contributions.json"
-                )
-            else:
-                contribution_data = _load_contributions(
-                    contributions_source, stage_data / "contributions.json"
-                )
-        else:
-            offline_data = contributions_source or (root / "data" / "contributions.json")
-            contribution_data = _load_contributions(
-                offline_data, stage_data / "contributions.json"
-            )
 
         info_svg = render_info_card(kural, USERNAME)
-        heatmap_svg = render_heatmap_svg(contribution_data, USERNAME)
         readme = README_TEMPLATE.format(username=USERNAME)
 
         staged_outputs = {
             stage_generated / "info-card.svg": generated_dir / "info-card.svg",
-            stage_generated / "contrib-heatmap.svg": generated_dir / "contrib-heatmap.svg",
-            stage_data / "contributions.json": data_dir / "contributions.json",
             stage / "README.md": readme_path,
         }
         (stage_generated / "info-card.svg").write_text(info_svg, encoding="utf-8")
-        (stage_generated / "contrib-heatmap.svg").write_text(
-            heatmap_svg, encoding="utf-8"
-        )
         (stage / "README.md").write_text(readme, encoding="utf-8")
 
         for _, destination in staged_outputs.items():
@@ -202,18 +152,15 @@ def generate_profile(
 
     return {
         "info": generated_dir / "info-card.svg",
-        "heatmap": generated_dir / "contrib-heatmap.svg",
-        "contributions": data_dir / "contributions.json",
         "readme": readme_path,
     }
 
 
 def main(argv=None):
     parser = ArgumentParser(description="Render the animated GitHub profile")
-    parser.add_argument("--offline", action="store_true", help="use committed local data")
     parser.add_argument("--date", help="override the profile date (YYYY-MM-DD)")
     args = parser.parse_args(argv)
-    generate_profile(date_override=args.date, fetch_network=not args.offline)
+    generate_profile(date_override=args.date)
 
 
 if __name__ == "__main__":

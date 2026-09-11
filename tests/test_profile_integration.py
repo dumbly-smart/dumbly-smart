@@ -1,4 +1,3 @@
-import json
 from datetime import date
 from pathlib import Path
 
@@ -8,28 +7,20 @@ from scripts.profile_data import select_daily_kural
 from scripts.render_profile import generate_profile, render_info_card
 
 
-FIXTURE_DIR = Path("tests/fixtures")
-
-
 def test_generate_profile_replaces_profile_outputs_from_fixtures(tmp_path):
     generate_profile(
         date_override=date(2026, 9, 11),
-        fetch_network=True,
         output_dir=tmp_path,
-        contributions_source=FIXTURE_DIR / "contributions.html",
     )
 
     generated = tmp_path / "generated"
-    data = tmp_path / "data" / "contributions.json"
     readme = (tmp_path / "README.md").read_text(encoding="utf-8")
     expected_kural = select_daily_kural(date(2026, 9, 11), KURALS_PATH)
 
-    for filename in ("info-card.svg", "contrib-heatmap.svg"):
+    for filename in ("info-card.svg",):
         content = (generated / filename).read_text(encoding="utf-8")
         assert content
 
-    assert data.exists()
-    assert json.loads(data.read_text(encoding="utf-8"))["total"] == 10
     assert expected_kural["tamil"][0] in (generated / "info-card.svg").read_text(
         encoding="utf-8"
     )
@@ -38,6 +29,18 @@ def test_generate_profile_replaces_profile_outputs_from_fixtures(tmp_path):
     assert "avi@github" not in readme
     assert "dumbly-smart@github" in readme
     assert "generated/ascii.svg" not in readme
+    assert "contrib-heatmap.svg" not in readme
+
+
+def test_profile_has_no_contribution_panel(tmp_path):
+    generate_profile(
+        date_override="2026-09-12",
+        output_dir=tmp_path,
+    )
+
+    readme = (tmp_path / "README.md").read_text(encoding="utf-8")
+    assert "contrib-heatmap.svg" not in readme
+    assert not (tmp_path / "generated" / "contrib-heatmap.svg").exists()
     assert "This profile is generated from public GitHub activity" not in readme
     assert "See the source and public work on" not in readme
 
@@ -45,9 +48,7 @@ def test_generate_profile_replaces_profile_outputs_from_fixtures(tmp_path):
 def test_profile_has_no_avatar_panel(tmp_path):
     generate_profile(
         date_override="2026-09-11",
-        fetch_network=False,
         output_dir=tmp_path,
-        contributions_source=Path("data/contributions.json"),
     )
 
     readme = (tmp_path / "README.md").read_text(encoding="utf-8")
@@ -60,9 +61,7 @@ def test_offline_date_generation_uses_local_sources(tmp_path):
     # the test remains isolated from the checkout.
     generate_profile(
         date_override="2026-09-11",
-        fetch_network=False,
         output_dir=tmp_path,
-        contributions_source=Path("data/contributions.json"),
     )
     info = (tmp_path / "generated" / "info-card.svg").read_text(encoding="utf-8")
     assert "Daily Thirukkural" in info
@@ -79,13 +78,9 @@ def test_checked_in_info_card_matches_current_renderer():
 
 def test_generation_restores_outputs_when_later_replacement_fails(tmp_path, monkeypatch):
     generated = tmp_path / "generated"
-    data = tmp_path / "data"
     generated.mkdir()
-    data.mkdir()
     destinations = [
         generated / "info-card.svg",
-        generated / "contrib-heatmap.svg",
-        data / "contributions.json",
         tmp_path / "README.md",
     ]
     for destination in destinations:
@@ -106,9 +101,7 @@ def test_generation_restores_outputs_when_later_replacement_fails(tmp_path, monk
     try:
         generate_profile(
             date_override=date(2026, 9, 11),
-            fetch_network=True,
             output_dir=tmp_path,
-            contributions_source=FIXTURE_DIR / "contributions.html",
         )
     except OSError as error:
         assert "simulated later replacement failure" in str(error)

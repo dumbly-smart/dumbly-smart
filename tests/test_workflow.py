@@ -16,6 +16,7 @@ def test_profile_workflow_matches_daily_refresh_contract():
     assert "python -m scripts.render_profile" in workflow
     assert "permissions:\n  contents: write" in workflow
     assert "[skip ci]" in workflow
-    assert "git add generated/*.svg data/contributions.json README.md" in workflow
+    assert "git add generated/info-card.svg README.md" in workflow
+    assert "contributions.json" not in workflow
     assert "render-thirukural.mjs" not in workflow
     assert "setup-node" not in workflow
