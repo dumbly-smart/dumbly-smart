@@ -1,23 +1,16 @@
-"""Pure SVG renderers and local avatar preparation for the profile README."""
+"""SVG renderers and profile generation for the GitHub README."""
 
 from __future__ import annotations
 
 import os
 import json
-import shutil
 import tempfile
 from argparse import ArgumentParser
 from datetime import date, datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import requests
-from PIL import Image, ImageOps
-
 from .config import (
-    AVATAR_URL,
-    CONTRIBUTIONS_PATH,
-    GENERATED_DIR,
     KURALS_PATH,
     TIMEZONE,
     USERNAME,
@@ -31,99 +24,9 @@ from .contributions import (
 from .profile_data import select_daily_kural
 
 
-TIMEOUT_SECONDS = 20
-DENSITY = " .:-=+*#%@"
-
-
-def download_avatar(destination, session=requests):
-    """Download the public avatar, replacing *destination* atomically."""
-    destination = Path(destination)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    response = session.get(AVATAR_URL, timeout=TIMEOUT_SECONDS)
-    response.raise_for_status()
-
-    temporary_name = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="wb", dir=destination.parent, prefix=f".{destination.name}.", delete=False
-        ) as temporary:
-            temporary_name = temporary.name
-            if hasattr(response, "iter_content"):
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        temporary.write(chunk)
-            else:
-                temporary.write(response.content)
-            temporary.flush()
-            os.fsync(temporary.fileno())
-        os.replace(temporary_name, destination)
-    finally:
-        if temporary_name and os.path.exists(temporary_name):
-            os.unlink(temporary_name)
-    return destination
-
-
-def avatar_to_grid(path, columns=92, rows=48):
-    """Convert an avatar into a rows-by-columns grayscale brightness grid."""
-    if columns <= 0 or rows <= 0:
-        raise ValueError("columns and rows must be positive")
-
-    with Image.open(path) as source:
-        image = ImageOps.exif_transpose(source).convert("L")
-        # Terminal glyphs are roughly twice as tall as they are wide. Fit into
-        # the character-cell aspect ratio, cropping excess edges rather than
-        # stretching non-square avatars, then average each vertical pair.
-        image = ImageOps.fit(
-            image,
-            (columns, rows * 2),
-            method=Image.Resampling.LANCZOS,
-            centering=(0.5, 0.5),
-        )
-        pixels = image.load()
-        return [
-            [round((pixels[column, row * 2] + pixels[column, row * 2 + 1]) / 2)
-             for column in range(columns)]
-            for row in range(rows)
-        ]
-
-
-def _brightness_character(value):
-    value = max(0, min(255, int(value)))
-    return DENSITY[(255 - value) * (len(DENSITY) - 1) // 255]
-
-
 def _svg_text(text, x, y, *, class_name="text", anchor=None):
     anchor_attribute = f' text-anchor="{anchor}"' if anchor else ""
     return f'<text class="{class_name}" x="{x}" y="{y}"{anchor_attribute}>{xml_escape(text)}</text>'
-
-
-def render_ascii_svg(grid, username):
-    """Render a dark terminal avatar with a one-time reveal for each row."""
-    rows = [list(row) for row in grid]
-    height = max(1, len(rows)) * 16 + 34
-    width = max(1, max((len(row) for row in rows), default=1)) * 9 + 24
-    escaped_user = xml_escape(username)
-    output = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'role="img" aria-label="ASCII avatar for {escaped_user}">',
-        "<title>Animated terminal avatar for " + escaped_user + "</title>",
-        "<style>.bg{fill:#0d1117}.text{fill:#c9d1d9;font:12px monospace;white-space:pre}.prompt{fill:#58a6ff}.reveal{animation:reveal .9s ease-out both}.cursor{fill:#58a6ff}@keyframes reveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}</style>",
-        f'<rect class="bg" width="{width}" height="{height}" rx="8"/>',
-        _svg_text(f"{username}@github:~$ avatar", 12, 18, class_name="text prompt"),
-    ]
-    for index, row in enumerate(rows):
-        content = "".join(_brightness_character(value) for value in row)
-        y = 34 + index * 16
-        output.append(
-            f'<clipPath id="row-{index}"><rect x="0" y="{y - 12}" width="{width}" height="16"/></clipPath>'
-        )
-        output.append(
-            f'<g class="reveal" style="animation-delay:{index * 35}ms" clip-path="url(#row-{index})">'
-            + _svg_text(content, 12, y)
-            + "</g>"
-        )
-    output.append("</svg>")
-    return "".join(output)
 
 
 def _as_lines(value) -> list[str]:
@@ -201,11 +104,8 @@ README_TEMPLATE = """<div align="center">
 <h3><code>{username}@github ~ $ ./contributions.sh</code></h3>
 <img src="./generated/contrib-heatmap.svg" width="860" alt="GitHub contribution heatmap" />
 <br><br>
-<h3><code>{username}@github ~ $ ./whoami</code></h3>
-<table><tr>
-<td valign="top"><img src="./generated/ascii.svg" width="370" alt="ASCII portrait" /></td>
-<td valign="top"><img src="./generated/info-card.svg" width="490" alt="Profile information card" /></td>
-</tr></table>
+<h3><code>{username}@github ~ $ ./kural --today</code></h3>
+<img src="./generated/info-card.svg" width="760" alt="Daily Thirukkural terminal card" />
 </div>
 
 This profile is generated from public GitHub activity and a daily Thirukkural.
@@ -227,11 +127,6 @@ def _load_contributions(source, destination):
         data = json.loads(source.read_text(encoding="utf-8"))
     _write_json(destination, data)
     return data
-
-
-def _stage_avatar(source, destination):
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, destination)
 
 
 def _promote_outputs(staged_outputs):
@@ -268,7 +163,6 @@ def generate_profile(
     date_override=None,
     fetch_network=True,
     output_dir=None,
-    avatar_source=None,
     contributions_source=None,
 ):
     """Generate the complete animated profile into the repository outputs."""
@@ -286,13 +180,7 @@ def generate_profile(
         stage_data = stage / "data"
         stage_generated.mkdir()
         stage_data.mkdir()
-        stage_avatar = stage / "avatar"
-
         if fetch_network:
-            if avatar_source is None:
-                download_avatar(stage_avatar)
-            else:
-                _stage_avatar(avatar_source, stage_avatar)
             if contributions_source is None:
                 contribution_data = fetch_contributions(
                     USERNAME, stage_data / "contributions.json"
@@ -302,14 +190,11 @@ def generate_profile(
                     contributions_source, stage_data / "contributions.json"
                 )
         else:
-            offline_avatar = avatar_source or root / "tests" / "fixtures" / "avatar.png"
-            _stage_avatar(offline_avatar, stage_avatar)
             offline_data = contributions_source or (root / "data" / "contributions.json")
             contribution_data = _load_contributions(
                 offline_data, stage_data / "contributions.json"
             )
 
-        ascii_svg = render_ascii_svg(avatar_to_grid(stage_avatar), USERNAME)
         info_svg = render_info_card(
             kural, USERNAME, highlights=PROJECT_HIGHLIGHTS, day=day
         )
@@ -317,13 +202,11 @@ def generate_profile(
         readme = README_TEMPLATE.format(username=USERNAME)
 
         staged_outputs = {
-            stage_generated / "ascii.svg": generated_dir / "ascii.svg",
             stage_generated / "info-card.svg": generated_dir / "info-card.svg",
             stage_generated / "contrib-heatmap.svg": generated_dir / "contrib-heatmap.svg",
             stage_data / "contributions.json": data_dir / "contributions.json",
             stage / "README.md": readme_path,
         }
-        (stage_generated / "ascii.svg").write_text(ascii_svg, encoding="utf-8")
         (stage_generated / "info-card.svg").write_text(info_svg, encoding="utf-8")
         (stage_generated / "contrib-heatmap.svg").write_text(
             heatmap_svg, encoding="utf-8"
@@ -335,7 +218,6 @@ def generate_profile(
         _promote_outputs(staged_outputs)
 
     return {
-        "ascii": generated_dir / "ascii.svg",
         "info": generated_dir / "info-card.svg",
         "heatmap": generated_dir / "contrib-heatmap.svg",
         "contributions": data_dir / "contributions.json",
