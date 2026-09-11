@@ -46,7 +46,7 @@ def test_fetch_contributions_parses_before_writing(tmp_path, monkeypatch):
             return None
 
     def get(url, timeout):
-        assert url.endswith("/dumbly-smart")
+        assert url == "https://github.com/users/dumbly-smart/contributions"
         assert timeout == 20
         return Response()
 

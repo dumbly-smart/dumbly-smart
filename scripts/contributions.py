@@ -85,7 +85,10 @@ def parse_contribution_html(html: str) -> dict:
 
 def fetch_contributions(username: str, destination) -> dict:
     """Fetch, parse, and then persist a public GitHub contribution page."""
-    response = requests.get(f"https://github.com/{username}", timeout=TIMEOUT_SECONDS)
+    response = requests.get(
+        f"https://github.com/users/{username}/contributions",
+        timeout=TIMEOUT_SECONDS,
+    )
     response.raise_for_status()
     data = parse_contribution_html(response.text)
 
