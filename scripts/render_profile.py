@@ -60,7 +60,7 @@ def render_info_card(kural, username, highlights=None, day=None):
     output = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 {height}" role="img" aria-label="Profile information and Kural {xml_escape(number)}">',
         f'<title>{xml_escape(username)}@github daily Thirukkural</title>',
-        "<style>.bg{fill:#0d1117}.bar{fill:#161b22}.label{fill:#8b949e;font:13px monospace}.value{fill:#c9d1d9;font:14px monospace}.kural{fill:#79c0ff;font:16px sans-serif}.english{fill:#c9d1d9;font:13px sans-serif}.dot{fill:#3fb950}.line{animation:rise .7s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>",
+        "<style>.bg{fill:#0d1117}.bar{fill:#161b22}.label{fill:#8b949e;font:13px monospace}.value{fill:#c9d1d9;font:14px monospace}.kural{fill:#79c0ff;font:22px sans-serif}.english{fill:#c9d1d9;font:16px sans-serif}.dot{fill:#3fb950}.line{animation:rise .7s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>",
         f'<rect class="bg" width="760" height="{height}" rx="9"/>',
         '<rect class="bar" width="760" height="30" rx="9"/>',
         '<circle class="dot" cx="18" cy="15" r="5"/><circle fill="#d29922" cx="36" cy="15" r="5"/><circle fill="#f85149" cx="54" cy="15" r="5"/>',
@@ -68,9 +68,8 @@ def render_info_card(kural, username, highlights=None, day=None):
         '<g class="line" style="animation-delay:80ms">' + _svg_text("user", 24, 58, class_name="label") + _svg_text(f"{username}@github", 150, 58, class_name="value") + "</g>",
         '<g class="line" style="animation-delay:140ms">' + _svg_text("date", 24, 82, class_name="label") + _svg_text(display_day.isoformat(), 150, 82, class_name="value") + "</g>",
         '<g class="line" style="animation-delay:200ms">' + _svg_text("kural", 24, 106, class_name="label") + _svg_text(str(number), 150, 106, class_name="value") + "</g>",
-        '<g class="line" style="animation-delay:260ms">' + _svg_text("focus", 24, 130, class_name="label") + _svg_text(", ".join(highlights) if highlights else "clarity · consistency · curiosity", 150, 130, class_name="value") + "</g>",
     ]
-    y = 160
+    y = 142
     for index, line in enumerate(tamil_lines):
         delay = 320 + index * 60
         duration = max(1.2, len(line) * 0.045)

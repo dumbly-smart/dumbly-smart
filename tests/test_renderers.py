@@ -15,6 +15,17 @@ def test_info_card_contains_username_and_kural_but_not_old_name_prompt():
     assert "avi@github" not in svg
 
 
+def test_info_card_omits_focus_row_and_uses_large_kural_type():
+    svg = render_info_card(
+        {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
+        username="dumbly-smart",
+    )
+
+    assert ">focus<" not in svg
+    assert ".kural{fill:#79c0ff;font:22px" in svg
+    assert ".english{fill:#c9d1d9;font:16px" in svg
+
+
 def test_info_card_accepts_explicit_day():
     svg = render_info_card(
         {"number": 42, "tamil": ["ஒரு குறள்"], "english": "A Kural"},
